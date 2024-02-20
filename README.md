@@ -1,4 +1,4 @@
-# unmissable 🔔🔔
+# 🔔🔔 unmissable
 
 ## Description
 
@@ -30,11 +30,12 @@ This app is featured in both IOS app store and Android playstore
 
 ### Dependencies
 
-| Depencency   | Version |
-| ------------ | ------- |
-| provider     | ^6.1.1  |
-| hive         | ^2.2.3  |
-| font_awesome | ^10.7.0 |
+| Depencency       | Version |
+| ---------------- | ------- |
+| provider         | ^6.1.1  |
+| hive             | ^2.2.3  |
+| font_awesome     | ^10.7.0 |
+| flutter_slidable | ^3.0.1  |
 
 ### State Management
 

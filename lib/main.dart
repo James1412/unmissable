@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:unmissable/screens/home_screen.dart';
+import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/themes.dart';
 
 void main() async {
@@ -26,7 +26,7 @@ class _UnmissableAppState extends State<UnmissableApp> {
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: ThemeMode.system,
-      home: const HomeScreen(),
+      home: const NavigationScreen(),
     );
   }
 }

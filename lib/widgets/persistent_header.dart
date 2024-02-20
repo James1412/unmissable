@@ -1,27 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
   void onMoreTap(context) {
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.85,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: CupertinoListSection.insetGrouped(
-          header: const Text("Section 1"),
-          children: const [
-            CupertinoListTile.notched(
-              title: Text("open pull request"),
-              trailing: CupertinoListTileChevron(),
-            ),
-          ],
-        ),
-      ),
+      builder: (context) => const CupertinoModalPopupSheet(),
     );
   }
 
@@ -35,18 +21,21 @@ class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
           const SizedBox(
             height: 50,
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Notes",
-                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-              ),
-              GestureDetector(
-                onTap: () => onMoreTap(context),
-                child: const Icon(FontAwesomeIcons.ellipsis),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.only(left: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Notes",
+                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () => onMoreTap(context),
+                  child: const Icon(FontAwesomeIcons.ellipsis),
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 10,
