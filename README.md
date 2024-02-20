@@ -34,4 +34,4 @@ This app is featured in both IOS app store and Android playstore
 
 ### State Management
 
-I used MVVM architecture for this project.
+I used MVVM architecture with Provider for this project.
