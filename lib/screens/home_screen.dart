@@ -10,6 +10,29 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List notes = [
+    '1',
+    '12',
+    '2334',
+    '343',
+    '2',
+    23,
+    34,
+    32,
+    43,
+    42,
+    34,
+    23,
+    4,
+    3,
+    24,
+    34,
+    2,
+    34,
+    2,
+    34,
+  ];
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -21,25 +44,32 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: SafeArea(
-          child: NestedScrollView(
-            floatHeaderSlivers: true,
-            scrollBehavior: const CupertinoScrollBehavior(),
-            physics: const NeverScrollableScrollPhysics(),
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: CustomScrollView(
+            slivers: [
               SliverPersistentHeader(
-                floating: true,
+                pinned: true,
                 delegate: CustomDelegate(),
               ),
-            ],
-            body: ListView(
-              children: List.generate(
-                100,
-                (index) => ListTile(
-                  title: Text("$index"),
+              SliverToBoxAdapter(
+                child: Transform.translate(
+                  offset: const Offset(0, -25),
+                  child: ListView.separated(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: notes.length,
+                    separatorBuilder: (context, index) => const Divider(),
+                    itemBuilder: (context, index) => SizedBox(
+                      height: 70,
+                      child: Text(
+                        notes[index].toString(),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
+              )
+            ],
           ),
         ),
       ),
@@ -53,35 +83,35 @@ class CustomDelegate extends SliverPersistentHeaderDelegate {
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
       color: Colors.white,
-      child: const Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Notes",
-                  style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-                ),
-                Icon(FontAwesomeIcons.ellipsis),
-              ],
-            ),
-            SizedBox(
-              height: 10,
-            ),
-            CupertinoSearchTextField(),
-          ],
-        ),
+      child: const Column(
+        children: [
+          SizedBox(
+            height: 50,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Notes",
+                style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
+              ),
+              Icon(FontAwesomeIcons.ellipsis),
+            ],
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          CupertinoSearchTextField(),
+        ],
       ),
     );
   }
 
   @override
-  double get maxExtent => 110;
+  double get maxExtent => 150;
 
   @override
-  double get minExtent => 110;
+  double get minExtent => 150;
 
   @override
   bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
