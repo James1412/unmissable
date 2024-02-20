@@ -47,6 +47,18 @@ class NotesViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  void updateNote(NoteModel noteModel) {
+    notes.map(
+      (NoteModel note) {
+        if (note.uniqueKey == noteModel.uniqueKey) {
+          return noteModel;
+        }
+      },
+    );
+    sortHelper();
+    notifyListeners();
+  }
+
   void sortHelper() {
     // Edited Time sort new -> old
     // New pinned -> on top

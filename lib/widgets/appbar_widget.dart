@@ -19,7 +19,27 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     }
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => const CupertinoModalPopupSheet(),
+      builder: (context) => CupertinoModalPopupSheet(
+        height: MediaQuery.of(context).size.height * 0.85,
+        child: CupertinoListSection.insetGrouped(
+          header: const Opacity(
+            opacity: 0.6,
+            child: Text(
+              "SECTION 1",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+          ),
+          children: const [
+            CupertinoListTile(
+              title: Text("open pull request"),
+              trailing: CupertinoListTileChevron(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

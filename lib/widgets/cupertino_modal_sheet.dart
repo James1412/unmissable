@@ -5,7 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class CupertinoModalPopupSheet extends StatefulWidget {
-  const CupertinoModalPopupSheet({super.key});
+  final Widget child;
+  final double height;
+  const CupertinoModalPopupSheet(
+      {super.key, required this.child, required this.height});
 
   @override
   State<CupertinoModalPopupSheet> createState() =>
@@ -16,7 +19,7 @@ class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height * 0.85,
+      height: widget.height,
       decoration: const BoxDecoration(
         color: CupertinoColors.systemGroupedBackground,
         borderRadius: BorderRadius.vertical(
@@ -52,24 +55,7 @@ class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
                 ),
               ),
             ),
-            CupertinoListSection.insetGrouped(
-              header: const Opacity(
-                opacity: 0.6,
-                child: Text(
-                  "SECTION 1",
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-              children: const [
-                CupertinoListTile(
-                  title: Text("open pull request"),
-                  trailing: CupertinoListTileChevron(),
-                ),
-              ],
-            ),
+            widget.child,
           ],
         ),
       ),

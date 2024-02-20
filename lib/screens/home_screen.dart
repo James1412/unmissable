@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/screens/edit_screen.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/appbar_widget.dart';
 
@@ -131,7 +132,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditScreen(
+                                note: notes[index],
+                              ),
+                            ));
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: CupertinoListTile(
