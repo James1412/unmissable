@@ -34,6 +34,30 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+  void showToast(
+      {required String message, required IconData icon, required Color color}) {
+    fToast.showToast(
+      toastDuration: const Duration(seconds: 1),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(25.0),
+          color: color,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(icon),
+            const SizedBox(
+              width: 12.0,
+            ),
+            Text(message),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
@@ -70,19 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   itemBuilder: (context, index) => Slidable(
-                    key: UniqueKey(),
                     endActionPane: ActionPane(
                       motion: const DrawerMotion(),
                       children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            context
-                                .read<NotesViewModel>()
-                                .deleteNote(notes[index].uniqueKey);
-                          },
-                          backgroundColor: Colors.red,
-                          icon: FontAwesomeIcons.trash,
-                        ),
                         SlidableAction(
                           onPressed: (context) {
                             if (Platform.isIOS) {
@@ -91,31 +105,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .togglePin(notes[index]);
-                            fToast.showToast(
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 24.0, vertical: 12.0),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  color: Colors.greenAccent,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    const Icon(Icons.check),
-                                    const SizedBox(
-                                      width: 12.0,
-                                    ),
-                                    Text(notes[index].isPinned
-                                        ? "Pinned"
-                                        : "Unpinned"),
-                                  ],
-                                ),
-                              ),
-                            );
+                            showToast(
+                                message: notes[index].isPinned
+                                    ? "Pinned"
+                                    : "Unpinned",
+                                icon: Icons.check,
+                                color: Colors.greenAccent);
                           },
                           backgroundColor: Colors.blue,
                           icon: FontAwesomeIcons.thumbtack,
+                        ),
+                        SlidableAction(
+                          onPressed: (context) {
+                            context
+                                .read<NotesViewModel>()
+                                .deleteNote(notes[index].uniqueKey);
+                            showToast(
+                                message: "Deleted",
+                                icon: Icons.delete,
+                                color: Colors.redAccent);
+                          },
+                          backgroundColor: Colors.red,
+                          icon: FontAwesomeIcons.trash,
                         ),
                       ],
                     ),

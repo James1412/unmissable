@@ -49,8 +49,12 @@ class NotesViewModel with ChangeNotifier {
 
   void sortHelper() {
     // Edited Time sort new -> old
-    List<NoteModel> pinnedNotes =
-        notes.where((NoteModel note) => note.isPinned).toList();
+    // New pinned -> on top
+    List<NoteModel> pinnedNotes = notes
+        .where((NoteModel note) => note.isPinned)
+        .toList()
+        .reversed
+        .toList();
     List<NoteModel> unPinnedNotes =
         notes.where((NoteModel note) => !note.isPinned).toList();
     unPinnedNotes.sort((a, b) => b.editedDateTime.compareTo(a.editedDateTime));

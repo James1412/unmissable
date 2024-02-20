@@ -1,9 +1,10 @@
 import 'dart:io';
-import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/view_models/notes_view_model.dart';
 
 class WriteScreen extends StatefulWidget {
   const WriteScreen({super.key});
@@ -70,7 +71,18 @@ class _WriteScreenState extends State<WriteScreen> {
                         ),
                       ),
                       CupertinoActionSheetAction(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<NotesViewModel>().addNote(
+                                NoteModel(
+                                    uniqueKey: UniqueKey().hashCode,
+                                    title: _titleController.text,
+                                    body: _textEditingController.text,
+                                    createdDateTime: DateTime.now(),
+                                    editedDateTime: DateTime.now(),
+                                    isPinned: false),
+                              );
+                          Navigator.pop(context);
+                        },
                         child: const Text(
                           "Create",
                           style: TextStyle(color: Colors.blue),
