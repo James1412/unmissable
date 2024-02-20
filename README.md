@@ -30,7 +30,11 @@ This app is featured in both IOS app store and Android playstore
 
 ### Dependencies
 
-...
+| Depencency   | Version |
+| ------------ | ------- |
+| provider     | ^6.1.1  |
+| hive         | ^2.2.3  |
+| font_awesome | ^10.7.0 |
 
 ### State Management
 
