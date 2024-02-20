@@ -1,7 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/appbar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,29 +19,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List notes = [
-    '1',
-    '12',
-    '2334',
-    '343',
-    '2',
-    23,
-    34,
-    32,
-    43,
-    42,
-    34,
-    23,
-    4,
-    3,
-    24,
-    34,
-    2,
-    34,
-    2,
-    34,
-  ];
   final ScrollController _scrollController = ScrollController();
+  late FToast fToast;
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -43,6 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    List<NoteModel> notes = context.watch<NotesViewModel>().notes;
     return GestureDetector(
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
@@ -81,12 +75,45 @@ class _HomeScreenState extends State<HomeScreen> {
                       motion: const DrawerMotion(),
                       children: [
                         SlidableAction(
-                          onPressed: (context) {},
+                          onPressed: (context) {
+                            context
+                                .read<NotesViewModel>()
+                                .deleteNote(notes[index].uniqueKey);
+                          },
                           backgroundColor: Colors.red,
                           icon: FontAwesomeIcons.trash,
                         ),
                         SlidableAction(
-                          onPressed: (context) {},
+                          onPressed: (context) {
+                            if (Platform.isIOS) {
+                              HapticFeedback.lightImpact();
+                            }
+                            context
+                                .read<NotesViewModel>()
+                                .togglePin(notes[index]);
+                            fToast.showToast(
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 24.0, vertical: 12.0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  color: Colors.greenAccent,
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.check),
+                                    const SizedBox(
+                                      width: 12.0,
+                                    ),
+                                    Text(notes[index].isPinned
+                                        ? "Pinned"
+                                        : "Unpinned"),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                           backgroundColor: Colors.blue,
                           icon: FontAwesomeIcons.thumbtack,
                         ),
@@ -102,14 +129,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             horizontal: 5,
                           ),
                           title: Text(
-                            notes[index].toString(),
+                            notes[index].title,
                           ),
-                          additionalInfo: FaIcon(
-                            FontAwesomeIcons.thumbtack,
-                            color: Colors.blue.shade700,
-                            size: 15,
-                          ),
-                          subtitle: const Text("subtitle"),
+                          additionalInfo: notes[index].isPinned
+                              ? FaIcon(
+                                  FontAwesomeIcons.thumbtack,
+                                  color: Colors.blue.shade700,
+                                  size: 15,
+                                )
+                              : null,
+                          subtitle: Text(notes[index].body),
                         ),
                       ),
                     ),
