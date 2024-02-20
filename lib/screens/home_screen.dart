@@ -92,10 +92,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: InkWell(
-                        onTap: () {},
+                    child: InkWell(
+                      onTap: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: CupertinoListTile(
                           padding: const EdgeInsets.symmetric(
                             vertical: 15,

@@ -25,6 +25,12 @@ class _WriteScreenState extends State<WriteScreen> {
     super.dispose();
   }
 
+  void onClear() {
+    _textEditingController.clear();
+    _titleController.clear();
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -72,11 +78,7 @@ class _WriteScreenState extends State<WriteScreen> {
                       ),
                       CupertinoActionSheetAction(
                         isDestructiveAction: true,
-                        onPressed: () {
-                          _textEditingController.clear();
-                          _titleController.clear();
-                          Navigator.pop(context);
-                        },
+                        onPressed: onClear,
                         child: const Text(
                           "Clear",
                         ),
@@ -96,7 +98,7 @@ class _WriteScreenState extends State<WriteScreen> {
           ],
         ),
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: TextField(
             cursorColor: Colors.blue,
             controller: _textEditingController,

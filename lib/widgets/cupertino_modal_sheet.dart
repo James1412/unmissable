@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class CupertinoModalPopupSheet extends StatefulWidget {
   const CupertinoModalPopupSheet({super.key});
@@ -32,6 +35,9 @@ class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
                   padding: const EdgeInsets.all(15.0),
                   child: GestureDetector(
                     onTap: () {
+                      if (Platform.isIOS) {
+                        HapticFeedback.lightImpact();
+                      }
                       Navigator.pop(context);
                     },
                     child: const Text(
