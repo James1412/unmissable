@@ -1,10 +1,16 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
-class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
-  void onMoreTap(context) {
+class AppBarWidget extends StatefulWidget {
+  const AppBarWidget({super.key});
+
+  @override
+  State<AppBarWidget> createState() => _AppBarWidgetState();
+}
+
+class _AppBarWidgetState extends State<AppBarWidget> {
+  void onMoreTap({required BuildContext context}) {
     showCupertinoModalPopup(
       context: context,
       builder: (context) => const CupertinoModalPopupSheet(),
@@ -12,15 +18,11 @@ class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    return Container(
-      color: Colors.white,
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
         children: [
-          const SizedBox(
-            height: 50,
-          ),
           Padding(
             padding: const EdgeInsets.only(left: 10.0),
             child: Row(
@@ -31,7 +33,7 @@ class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
                   style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
                 ),
                 GestureDetector(
-                  onTap: () => onMoreTap(context),
+                  onTap: () => onMoreTap(context: context),
                   child: const Icon(FontAwesomeIcons.ellipsis),
                 ),
               ],
@@ -41,19 +43,11 @@ class TitleSearchDelegate extends SliverPersistentHeaderDelegate {
             height: 10,
           ),
           const CupertinoSearchTextField(),
+          const SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );
-  }
-
-  @override
-  double get maxExtent => 150;
-
-  @override
-  double get minExtent => 150;
-
-  @override
-  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
-    return false;
   }
 }

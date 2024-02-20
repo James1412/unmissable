@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:unmissable/widgets/persistent_header.dart';
+import 'package:unmissable/widgets/appbar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -34,6 +34,12 @@ class _HomeScreenState extends State<HomeScreen> {
     2,
     34,
   ];
+  final ScrollController _scrollController = ScrollController();
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: CustomScrollView(
-            slivers: [
-              SliverPersistentHeader(
-                pinned: true,
-                delegate: TitleSearchDelegate(),
-              ),
-              SliverToBoxAdapter(
-                child: Transform.translate(
-                  offset: const Offset(0, -40),
+        body: ListView(
+          physics: const NeverScrollableScrollPhysics(),
+          children: [
+            const AppBarWidget(),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.75,
+              child: Scrollbar(
+                interactive: true,
+                controller: _scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
                   child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
+                    controller: _scrollController,
                     itemCount: notes.length,
                     separatorBuilder: (context, index) => Opacity(
                       opacity: 0.15,
@@ -90,7 +95,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         onTap: () {},
                         child: CupertinoListTile(
                           padding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 5),
+                            vertical: 15,
+                            horizontal: 5,
+                          ),
                           title: Text(
                             notes[index].toString(),
                           ),
@@ -105,9 +112,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );

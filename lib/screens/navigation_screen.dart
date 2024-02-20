@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unmissable/screens/home_screen.dart';
 import 'package:unmissable/screens/write_screen.dart';
@@ -19,6 +22,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
   ];
 
   void changeScreen(int index) {
+    if (Platform.isIOS) {
+      HapticFeedback.lightImpact();
+    }
     setState(() {
       _index = index;
     });
@@ -30,7 +36,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       body: screens[_index],
       bottomSheet: Container(
         color: Colors.white,
-        height: 60,
+        height: 75,
         child: Row(
           children: [
             Expanded(
