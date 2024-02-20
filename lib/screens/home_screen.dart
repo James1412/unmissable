@@ -61,36 +61,39 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Scrollbar(
                 interactive: true,
                 controller: _scrollController,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: ListView.separated(
-                    controller: _scrollController,
-                    itemCount: notes.length,
-                    separatorBuilder: (context, index) => Opacity(
-                      opacity: 0.15,
+                child: ListView.separated(
+                  controller: _scrollController,
+                  itemCount: notes.length,
+                  separatorBuilder: (context, index) => Opacity(
+                    opacity: 0.15,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Container(
                         height: 1,
                         color: Colors.black,
                         width: double.maxFinite,
                       ),
                     ),
-                    itemBuilder: (context, index) => Slidable(
-                      key: UniqueKey(),
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: Colors.red,
-                            icon: FontAwesomeIcons.trash,
-                          ),
-                          SlidableAction(
-                            onPressed: (context) {},
-                            backgroundColor: Colors.blue,
-                            icon: FontAwesomeIcons.thumbtack,
-                          ),
-                        ],
-                      ),
+                  ),
+                  itemBuilder: (context, index) => Slidable(
+                    key: UniqueKey(),
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) {},
+                          backgroundColor: Colors.red,
+                          icon: FontAwesomeIcons.trash,
+                        ),
+                        SlidableAction(
+                          onPressed: (context) {},
+                          backgroundColor: Colors.blue,
+                          icon: FontAwesomeIcons.thumbtack,
+                        ),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: InkWell(
                         onTap: () {},
                         child: CupertinoListTile(
