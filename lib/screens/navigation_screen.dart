@@ -33,6 +33,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: screens[_index],
       bottomSheet: Container(
         color: Colors.white,
