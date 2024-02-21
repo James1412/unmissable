@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
+import 'package:unmissable/widgets/settings_popup.dart';
 
 class AppBarWidget extends StatefulWidget {
   const AppBarWidget({super.key});
@@ -13,36 +10,6 @@ class AppBarWidget extends StatefulWidget {
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
-  void onMoreTap({required BuildContext context}) {
-    if (Platform.isIOS) {
-      HapticFeedback.lightImpact();
-    }
-    showCupertinoModalPopup(
-      context: context,
-      builder: (context) => CupertinoModalPopupSheet(
-        height: MediaQuery.of(context).size.height * 0.85,
-        child: CupertinoListSection.insetGrouped(
-          header: const Opacity(
-            opacity: 0.6,
-            child: Text(
-              "SECTION 1",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-            ),
-          ),
-          children: const [
-            CupertinoListTile(
-              title: Text("open pull request"),
-              trailing: CupertinoListTileChevron(),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(

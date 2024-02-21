@@ -98,14 +98,14 @@ class _WriteScreenState extends State<WriteScreen> {
                           style: TextStyle(color: Colors.blue),
                         ),
                       ),
-                      CupertinoActionSheetAction(
-                        isDestructiveAction: true,
-                        onPressed: onClear,
-                        child: const Text(
-                          "Clear",
-                        ),
-                      ),
                     ],
+                    cancelButton: CupertinoActionSheetAction(
+                      isDestructiveAction: true,
+                      onPressed: onClear,
+                      child: const Text(
+                        "Clear",
+                      ),
+                    ),
                   ),
                 );
               },

@@ -39,6 +39,7 @@ This app is featured in both IOS app store and Android playstore
 | fluttertoast     | ^8.2.4  |
 | pull_down_button | ^0.9.3  |
 | intl             | ^0.19.0 |
+| url_launcher:    | ^6.2.4  |
 
 ### State Management
 
