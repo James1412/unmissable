@@ -75,7 +75,20 @@ class _WriteScreenState extends State<WriteScreen> {
                   builder: (context) => CupertinoActionSheet(
                     actions: [
                       CupertinoActionSheetAction(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<NotesViewModel>().addNote(
+                              NoteModel(
+                                uniqueKey: UniqueKey().hashCode,
+                                title: _titleController.text,
+                                body: _textEditingController.text,
+                                createdDateTime: DateTime.now(),
+                                editedDateTime: DateTime.now(),
+                                isPinned: false,
+                                isUnmissable: true,
+                              ),
+                              context);
+                          onClear();
+                        },
                         isDefaultAction: true,
                         child: const Text(
                           "Create as unmissable",
@@ -96,7 +109,7 @@ class _WriteScreenState extends State<WriteScreen> {
                                 ),
                                 context,
                               );
-                          Navigator.pop(context);
+                          onClear();
                         },
                         child: const Text(
                           "Create",

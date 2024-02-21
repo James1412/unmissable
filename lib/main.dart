@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
@@ -52,7 +51,15 @@ class _UnmissableAppState extends State<UnmissableApp> {
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: themeMode,
-      builder: FToastBuilder(),
+      builder: (context, child) => Overlay(
+        initialEntries: [
+          if (child != null) ...[
+            OverlayEntry(
+              builder: (context) => child,
+            ),
+          ]
+        ],
+      ),
       navigatorKey: navigatorKey,
       home: const NavigationScreen(),
     );

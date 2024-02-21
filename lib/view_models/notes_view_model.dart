@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
@@ -36,15 +40,23 @@ class NotesViewModel extends ChangeNotifier {
     ),
   ];
 
-  void deleteNote(int uniqueKey, BuildContext context) {
-    notes.removeWhere((NoteModel note) => note.uniqueKey == uniqueKey);
+  Future<void> deleteNote(NoteModel noteModel, BuildContext context) async {
+    notes
+        .removeWhere((NoteModel note) => note.uniqueKey == noteModel.uniqueKey);
     sortHelper(context);
+    if (noteModel.isUnmissable) {
+      await NotificationService()
+          .cancelScheduledNotification(noteModel.uniqueKey);
+    }
     notifyListeners();
   }
 
-  void addNote(NoteModel noteModel, BuildContext context) {
+  Future<void> addNote(NoteModel noteModel, BuildContext context) async {
     notes.add(noteModel);
     sortHelper(context);
+    if (noteModel.isUnmissable) {
+      await notificationOnHelper();
+    }
     notifyListeners();
   }
 
@@ -54,9 +66,18 @@ class NotesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void toggleUnmissable(NoteModel noteModel, BuildContext context) {
+  Future<void> toggleUnmissable(
+      NoteModel noteModel, BuildContext context) async {
     noteModel.isUnmissable = !noteModel.isUnmissable;
     sortHelper(context);
+    if (noteModel.isUnmissable) {
+      // When unmissable
+      await notificationOnHelper();
+    } else if (!noteModel.isUnmissable) {
+      // When cancelled unmissable
+      await NotificationService()
+          .cancelScheduledNotification(noteModel.uniqueKey);
+    }
     notifyListeners();
   }
 
@@ -72,43 +93,47 @@ class NotesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> notificationOnHelper() async {
+    for (NoteModel noteModel in notes) {
+      if (noteModel.isUnmissable) {
+        await NotificationService().showNotification(
+          title: noteModel.title,
+          body: noteModel.body,
+          id: noteModel.uniqueKey,
+        );
+        await NotificationService().repeatNotification(
+          title: noteModel.title,
+          body: noteModel.body,
+          id: noteModel.uniqueKey,
+          repeatInterval: RepeatInterval.hourly,
+        );
+      }
+    }
+  }
+
   void sortHelper(BuildContext context) {
     SortNotes sorting =
         Provider.of<SortNotesViewModel>(context, listen: false).sortNotes;
+    List<NoteModel> pinnedNotes = notes
+        .where((NoteModel note) => note.isPinned)
+        .toList()
+        .reversed
+        .toList();
+    List<NoteModel> unPinnedNotes =
+        notes.where((NoteModel note) => !note.isPinned).toList();
     if (sorting == SortNotes.modifiedDateTime) {
       // Edited Time sort new -> old
       // New pinned -> on top
-      List<NoteModel> pinnedNotes = notes
-          .where((NoteModel note) => note.isPinned)
-          .toList()
-          .reversed
-          .toList();
-      List<NoteModel> unPinnedNotes =
-          notes.where((NoteModel note) => !note.isPinned).toList();
       unPinnedNotes
           .sort((a, b) => b.editedDateTime.compareTo(a.editedDateTime));
       notes = pinnedNotes + unPinnedNotes;
       notifyListeners();
     } else if (sorting == SortNotes.createdDateTime) {
-      List<NoteModel> pinnedNotes = notes
-          .where((NoteModel note) => note.isPinned)
-          .toList()
-          .reversed
-          .toList();
-      List<NoteModel> unPinnedNotes =
-          notes.where((NoteModel note) => !note.isPinned).toList();
       unPinnedNotes
           .sort((a, b) => b.createdDateTime.compareTo(a.createdDateTime));
       notes = pinnedNotes + unPinnedNotes;
       notifyListeners();
     } else if (sorting == SortNotes.alphabetical) {
-      List<NoteModel> pinnedNotes = notes
-          .where((NoteModel note) => note.isPinned)
-          .toList()
-          .reversed
-          .toList();
-      List<NoteModel> unPinnedNotes =
-          notes.where((NoteModel note) => !note.isPinned).toList();
       unPinnedNotes.sort(
           (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
       notes = pinnedNotes + unPinnedNotes;

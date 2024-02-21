@@ -52,12 +52,16 @@ class NotificationService {
   }
 
   Future<void> repeatNotification(
-      {int id = 0, String? title, String? body, String? payLoad}) async {
+      {int id = 0,
+      String? title,
+      String? body,
+      String? payLoad,
+      required RepeatInterval repeatInterval}) async {
     return notificationsPlugin.periodicallyShow(
       id,
       title,
       body,
-      RepeatInterval.hourly,
+      repeatInterval,
       await notificationDetails(),
     );
   }

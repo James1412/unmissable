@@ -26,11 +26,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   late FToast fToast;
+  GlobalKey navigatorKey = GlobalKey();
   @override
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    if (navigatorKey.currentState != null) {
+      fToast.init(navigatorKey.currentState!.context);
+    } else {
+      fToast.init(context);
+    }
   }
 
   @override
@@ -50,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Scaffold(
+        key: GlobalKey(),
         resizeToAvoidBottomInset: false,
         backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         body: ListView(
@@ -84,6 +90,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             context
                                 .read<NotesViewModel>()
+                                .toggleUnmissable(notes[index], context);
+                            unmissableToast(fToast: fToast, note: notes[index]);
+                          },
+                          backgroundColor: Colors.yellow,
+                          icon: CupertinoIcons.bell_fill,
+                          foregroundColor: Colors.white,
+                        ),
+                        SlidableAction(
+                          onPressed: (context) {
+                            if (Platform.isIOS) {
+                              HapticFeedback.lightImpact();
+                            }
+                            context
+                                .read<NotesViewModel>()
                                 .togglePin(notes[index], context);
                             pinToast(fToast: fToast, note: notes[index]);
                           },
@@ -92,10 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SlidableAction(
                           onPressed: (context) {
+                            deleteToast(fToast: fToast, note: notes[index]);
                             context
                                 .read<NotesViewModel>()
-                                .deleteNote(notes[index].uniqueKey, context);
-                            deleteToast(fToast: fToast, note: notes[index]);
+                                .deleteNote(notes[index], context);
                           },
                           backgroundColor: Colors.red,
                           icon: FontAwesomeIcons.trash,
@@ -129,13 +149,38 @@ class _HomeScreenState extends State<HomeScreen> {
                               fontSize: fontSize,
                             ),
                           ),
-                          additionalInfo: notes[index].isPinned
-                              ? FaIcon(
-                                  FontAwesomeIcons.thumbtack,
-                                  color: Colors.blue.shade700,
-                                  size: 15,
-                                )
-                              : null,
+                          additionalInfo:
+                              notes[index].isPinned && notes[index].isUnmissable
+                                  ? Row(
+                                      children: [
+                                        Icon(
+                                          Icons.notifications,
+                                          color: Colors.yellow.shade700,
+                                          size: 19,
+                                        ),
+                                        const SizedBox(
+                                          width: 5,
+                                        ),
+                                        FaIcon(
+                                          FontAwesomeIcons.thumbtack,
+                                          color: Colors.blue.shade700,
+                                          size: 15,
+                                        ),
+                                      ],
+                                    )
+                                  : notes[index].isUnmissable
+                                      ? Icon(
+                                          Icons.notifications,
+                                          color: Colors.yellow.shade700,
+                                          size: 19,
+                                        )
+                                      : notes[index].isPinned
+                                          ? FaIcon(
+                                              FontAwesomeIcons.thumbtack,
+                                              color: Colors.blue.shade700,
+                                              size: 15,
+                                            )
+                                          : null,
                           subtitle: Text(
                             notes[index].body.replaceAll('\n', ''),
                             style: TextStyle(

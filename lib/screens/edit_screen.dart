@@ -26,11 +26,16 @@ class _EditScreenState extends State<EditScreen> {
   late final TextEditingController _textEditingController =
       TextEditingController(text: widget.note.body);
   late FToast fToast;
+  GlobalKey navigatorKey = GlobalKey();
   @override
   void initState() {
     super.initState();
     fToast = FToast();
-    fToast.init(context);
+    if (navigatorKey.currentState != null) {
+      fToast.init(navigatorKey.currentState!.context);
+    } else {
+      fToast.init(context);
+    }
   }
 
   @override
@@ -134,8 +139,8 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void onDelete() {
-    context.read<NotesViewModel>().deleteNote(widget.note.uniqueKey, context);
     deleteToast(fToast: fToast, note: widget.note);
+    context.read<NotesViewModel>().deleteNote(widget.note, context);
     Navigator.pop(context);
   }
 
@@ -154,6 +159,7 @@ class _EditScreenState extends State<EditScreen> {
           }
         },
         child: Scaffold(
+          key: GlobalKey(),
           backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: true,
@@ -177,6 +183,13 @@ class _EditScreenState extends State<EditScreen> {
                         ? CupertinoIcons.pin_fill
                         : CupertinoIcons.pin,
                     onTap: () {
+                      context.read<NotesViewModel>().updateNote(
+                            widget.note
+                              ..title = _titleController.text
+                              ..body = _textEditingController.text
+                              ..editedDateTime = DateTime.now(),
+                            context,
+                          );
                       context
                           .read<NotesViewModel>()
                           .togglePin(widget.note, context);
@@ -189,6 +202,13 @@ class _EditScreenState extends State<EditScreen> {
                         ? CupertinoIcons.bell_fill
                         : CupertinoIcons.bell,
                     onTap: () {
+                      context.read<NotesViewModel>().updateNote(
+                            widget.note
+                              ..title = _titleController.text
+                              ..body = _textEditingController.text
+                              ..editedDateTime = DateTime.now(),
+                            context,
+                          );
                       context
                           .read<NotesViewModel>()
                           .toggleUnmissable(widget.note, context);
