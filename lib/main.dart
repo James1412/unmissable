@@ -1,3 +1,4 @@
+import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,7 @@ void main() async {
           create: (context) => NotificationIntervalViewModel(),
         ),
       ],
-      child: const UnmissableApp(),
+      child: const BetterFeedback(child: UnmissableApp()),
     ),
   );
 }

@@ -29,14 +29,23 @@ class _WriteScreenState extends State<WriteScreen> {
     super.dispose();
   }
 
-  void onClear() {
-    _textEditingController.clear();
-    _titleController.clear();
-    Navigator.pop(context);
-  }
-
   FocusNode titleNode = FocusNode();
   FocusNode bodyNode = FocusNode();
+
+  void createNote({required bool isUnmissable, required BuildContext context}) {
+    context.read<NotesViewModel>().addNote(
+        NoteModel(
+          uniqueKey: UniqueKey().hashCode,
+          title: _titleController.text,
+          body: _textEditingController.text,
+          createdDateTime: DateTime.now(),
+          editedDateTime: DateTime.now(),
+          isPinned: false,
+          isUnmissable: isUnmissable,
+        ),
+        context);
+    Navigator.pop(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,20 +84,8 @@ class _WriteScreenState extends State<WriteScreen> {
                   builder: (context) => CupertinoActionSheet(
                     actions: [
                       CupertinoActionSheetAction(
-                        onPressed: () {
-                          context.read<NotesViewModel>().addNote(
-                              NoteModel(
-                                uniqueKey: UniqueKey().hashCode,
-                                title: _titleController.text,
-                                body: _textEditingController.text,
-                                createdDateTime: DateTime.now(),
-                                editedDateTime: DateTime.now(),
-                                isPinned: false,
-                                isUnmissable: true,
-                              ),
-                              context);
-                          onClear();
-                        },
+                        onPressed: () =>
+                            createNote(isUnmissable: true, context: context),
                         isDefaultAction: true,
                         child: const Text(
                           "Create as unmissable",
@@ -96,21 +93,8 @@ class _WriteScreenState extends State<WriteScreen> {
                         ),
                       ),
                       CupertinoActionSheetAction(
-                        onPressed: () {
-                          context.read<NotesViewModel>().addNote(
-                                NoteModel(
-                                  uniqueKey: UniqueKey().hashCode,
-                                  title: _titleController.text,
-                                  body: _textEditingController.text,
-                                  createdDateTime: DateTime.now(),
-                                  editedDateTime: DateTime.now(),
-                                  isPinned: false,
-                                  isUnmissable: false,
-                                ),
-                                context,
-                              );
-                          onClear();
-                        },
+                        onPressed: () =>
+                            createNote(isUnmissable: false, context: context),
                         child: const Text(
                           "Create",
                           style: TextStyle(color: Colors.blue),
@@ -119,9 +103,9 @@ class _WriteScreenState extends State<WriteScreen> {
                     ],
                     cancelButton: CupertinoActionSheetAction(
                       isDestructiveAction: true,
-                      onPressed: onClear,
+                      onPressed: () => Navigator.pop(context),
                       child: const Text(
-                        "Clear",
+                        "Cancel",
                       ),
                     ),
                   ),

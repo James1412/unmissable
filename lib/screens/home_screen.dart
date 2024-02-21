@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .read<NotesViewModel>()
                                 .toggleUnmissable(notes[index], context);
                           },
-                          backgroundColor: Colors.yellow,
+                          backgroundColor: Colors.amber,
                           icon: CupertinoIcons.bell_fill,
                           foregroundColor: Colors.white,
                         ),

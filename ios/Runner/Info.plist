@@ -45,12 +45,15 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Our application needs permission to save image</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>sms</string>
 		<string>tel</string>
 		<string>http</string>
 		<string>https</string>
+		<string>mailto</string>
 	</array>
 	
 </dict>
