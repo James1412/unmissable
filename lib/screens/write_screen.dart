@@ -32,6 +32,9 @@ class _WriteScreenState extends State<WriteScreen> {
     Navigator.pop(context);
   }
 
+  FocusNode titleNode = FocusNode();
+  FocusNode bodyNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -47,6 +50,10 @@ class _WriteScreenState extends State<WriteScreen> {
           surfaceTintColor: Colors.white,
           backgroundColor: Colors.white,
           title: TextField(
+            onSubmitted: (val) {
+              FocusScope.of(context).requestFocus(bodyNode);
+            },
+            focusNode: titleNode,
             cursorColor: Colors.blue,
             controller: _titleController,
             maxLines: 1,
@@ -118,6 +125,7 @@ class _WriteScreenState extends State<WriteScreen> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
           child: TextField(
+            focusNode: bodyNode,
             cursorColor: Colors.blue,
             controller: _textEditingController,
             keyboardType: TextInputType.multiline,

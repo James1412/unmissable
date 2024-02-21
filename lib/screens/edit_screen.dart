@@ -22,6 +22,13 @@ class _EditScreenState extends State<EditScreen> {
       TextEditingController(text: widget.note.title);
   late final TextEditingController _textEditingController =
       TextEditingController(text: widget.note.body);
+  late FToast fToast;
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
 
   @override
   void dispose() {
@@ -96,13 +103,8 @@ class _EditScreenState extends State<EditScreen> {
     Navigator.pop(context);
   }
 
-  late FToast fToast;
-  @override
-  void initState() {
-    super.initState();
-    fToast = FToast();
-    fToast.init(context);
-  }
+  FocusNode titleNode = FocusNode();
+  FocusNode bodyNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -176,8 +178,12 @@ class _EditScreenState extends State<EditScreen> {
             child: Column(
               children: [
                 TextField(
+                  focusNode: titleNode,
                   cursorColor: Colors.blue,
                   controller: _titleController,
+                  onSubmitted: (val) {
+                    FocusScope.of(context).requestFocus(bodyNode);
+                  },
                   style: const TextStyle(
                       fontSize: 30, fontWeight: FontWeight.bold),
                   decoration:
@@ -186,6 +192,7 @@ class _EditScreenState extends State<EditScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
+                    focusNode: bodyNode,
                     cursorColor: Colors.blue,
                     controller: _textEditingController,
                     keyboardType: TextInputType.multiline,
