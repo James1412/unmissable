@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/edit_screen.dart';
+import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/appbar_widget.dart';
 
@@ -33,30 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void showToast(
-      {required String message, required IconData icon, required Color color}) {
-    fToast.showToast(
-      toastDuration: const Duration(seconds: 1),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(25.0),
-          color: color,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon),
-            const SizedBox(
-              width: 12.0,
-            ),
-            Text(message),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -106,12 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .togglePin(notes[index]);
-                            showToast(
-                                message: notes[index].isPinned
-                                    ? "Pinned"
-                                    : "Unpinned",
-                                icon: Icons.check,
-                                color: Colors.greenAccent);
+                            pinToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.blue,
                           icon: FontAwesomeIcons.thumbtack,
@@ -121,10 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .deleteNote(notes[index].uniqueKey);
-                            showToast(
-                                message: "Deleted",
-                                icon: Icons.delete,
-                                color: Colors.redAccent);
+                            deleteToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.red,
                           icon: FontAwesomeIcons.trash,
@@ -159,7 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   size: 15,
                                 )
                               : null,
-                          subtitle: Text(notes[index].body),
+                          subtitle:
+                              Text(notes[index].body.replaceAll('\n', '')),
                         ),
                       ),
                     ),

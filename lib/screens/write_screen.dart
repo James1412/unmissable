@@ -49,6 +49,7 @@ class _WriteScreenState extends State<WriteScreen> {
           title: TextField(
             cursorColor: Colors.blue,
             controller: _titleController,
+            maxLines: 1,
             style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             decoration: const InputDecoration.collapsed(hintText: 'Title'),
           ),

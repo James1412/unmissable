@@ -1,12 +1,11 @@
-import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:unmissable/models/note_model.dart';
-import 'package:unmissable/screens/navigation_screen.dart';
+import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
@@ -29,30 +28,6 @@ class _EditScreenState extends State<EditScreen> {
     _textEditingController.dispose();
     _titleController.dispose();
     super.dispose();
-  }
-
-  void onCancel() {
-    _textEditingController.clear();
-    _titleController.clear();
-    Navigator.pop(context);
-    Navigator.pushReplacement(
-      context,
-      PageRouteBuilder(
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(-1.0, 0.0);
-          const end = Offset.zero;
-          const curve = Curves.ease;
-          var tween =
-              Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            const NavigationScreen(),
-      ),
-    );
   }
 
   void onPop() {
@@ -94,15 +69,19 @@ class _EditScreenState extends State<EditScreen> {
             CupertinoListTile(
               title: const Text("Characters"),
               trailing: Material(
-                  type: MaterialType.transparency,
-                  child: Text(_textEditingController.text.length.toString())),
+                type: MaterialType.transparency,
+                child: Text(
+                  _textEditingController.text.length.toString(),
+                ),
+              ),
             ),
             CupertinoListTile(
               title: const Text("Words"),
               trailing: Material(
                 type: MaterialType.transparency,
                 child: Text(
-                    _textEditingController.text.split(' ').length.toString()),
+                  _textEditingController.text.split(' ').length.toString(),
+                ),
               ),
             ),
           ],
@@ -111,12 +90,24 @@ class _EditScreenState extends State<EditScreen> {
     );
   }
 
+  void onDelete() {
+    context.read<NotesViewModel>().deleteNote(widget.note.uniqueKey);
+    deleteToast(fToast: fToast, note: widget.note);
+    Navigator.pop(context);
+  }
+
+  late FToast fToast;
+  @override
+  void initState() {
+    super.initState();
+    fToast = FToast();
+    fToast.init(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (val) {
-        onPop();
-      },
+      onPopInvoked: (val) => onPop(),
       child: GestureDetector(
         onTap: () {
           if (FocusManager.instance.primaryFocus != null) {
@@ -145,23 +136,28 @@ class _EditScreenState extends State<EditScreen> {
                     icon: widget.note.isPinned
                         ? CupertinoIcons.pin_fill
                         : CupertinoIcons.pin,
-                    onTap: () =>
-                        context.read<NotesViewModel>().togglePin(widget.note),
+                    onTap: () {
+                      context.read<NotesViewModel>().togglePin(widget.note);
+                      pinToast(fToast: fToast, note: widget.note);
+                    },
                   ),
                   PullDownMenuItem(
                     title: 'Unmissable',
                     icon: widget.note.isUnmissable
                         ? CupertinoIcons.bell_fill
                         : CupertinoIcons.bell,
-                    onTap: () => context
-                        .read<NotesViewModel>()
-                        .toggleUnmissable(widget.note),
+                    onTap: () {
+                      context
+                          .read<NotesViewModel>()
+                          .toggleUnmissable(widget.note);
+                      unmissableToast(fToast: fToast, note: widget.note);
+                    },
                   ),
                   PullDownMenuItem(
                     isDestructive: true,
                     title: 'Delete',
                     icon: CupertinoIcons.trash,
-                    onTap: () {},
+                    onTap: onDelete,
                   ),
                 ],
                 buttonBuilder: (context, showMenu) => CupertinoButton(

@@ -3,7 +3,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
-import 'package:unmissable/themes.dart';
+import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 
 void main() async {
