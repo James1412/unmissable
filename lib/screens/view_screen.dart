@@ -13,16 +13,15 @@ import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
-class EditScreen extends StatefulWidget {
+class ViewScreen extends StatefulWidget {
   final NoteModel note;
-  final Function deleteSearch;
-  const EditScreen({super.key, required this.note, required this.deleteSearch});
+  const ViewScreen({super.key, required this.note});
 
   @override
-  State<EditScreen> createState() => _EditScreenState();
+  State<ViewScreen> createState() => _ViewScreenState();
 }
 
-class _EditScreenState extends State<EditScreen> {
+class _ViewScreenState extends State<ViewScreen> {
   late final TextEditingController _titleController =
       TextEditingController(text: widget.note.title);
   late final TextEditingController _textEditingController =
@@ -130,18 +129,6 @@ class _EditScreenState extends State<EditScreen> {
     );
   }
 
-  void onDelete() {
-    if (Platform.isIOS) {
-      HapticFeedback.lightImpact();
-    }
-    context.read<NotesViewModel>().deleteNote(widget.note, context);
-    widget.deleteSearch(widget.note);
-    Navigator.pop(context);
-  }
-
-  FocusNode titleNode = FocusNode();
-  FocusNode bodyNode = FocusNode();
-
   @override
   Widget build(BuildContext context) {
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
@@ -173,52 +160,19 @@ class _EditScreenState extends State<EditScreen> {
               PullDownButton(
                 itemBuilder: (context) => [
                   PullDownMenuItem(
-                    title: 'Pin',
-                    icon: widget.note.isPinned
-                        ? CupertinoIcons.pin_fill
-                        : CupertinoIcons.pin,
+                    title: 'Recover',
+                    icon: Icons.restore,
                     onTap: () {
                       if (Platform.isIOS) {
                         HapticFeedback.lightImpact();
                       }
-                      context.read<NotesViewModel>().updateNote(
-                            widget.note
-                              ..title = _titleController.text
-                              ..body = _textEditingController.text
-                              ..editedDateTime = DateTime.now(),
-                            context,
-                          );
-                      context
-                          .read<NotesViewModel>()
-                          .togglePin(widget.note, context);
-                    },
-                  ),
-                  PullDownMenuItem(
-                    title: 'Unmissable',
-                    icon: widget.note.isUnmissable
-                        ? CupertinoIcons.bell_fill
-                        : CupertinoIcons.bell,
-                    onTap: () {
-                      if (Platform.isIOS) {
-                        HapticFeedback.lightImpact();
-                      }
-                      context.read<NotesViewModel>().updateNote(
-                            widget.note
-                              ..title = _titleController.text
-                              ..body = _textEditingController.text
-                              ..editedDateTime = DateTime.now(),
-                            context,
-                          );
-                      context
-                          .read<NotesViewModel>()
-                          .toggleUnmissable(widget.note, context);
                     },
                   ),
                   PullDownMenuItem(
                     isDestructive: true,
                     title: 'Delete',
                     icon: CupertinoIcons.trash,
-                    onTap: onDelete,
+                    onTap: () {},
                   ),
                 ],
                 buttonBuilder: (context, showMenu) => CupertinoButton(
@@ -237,12 +191,9 @@ class _EditScreenState extends State<EditScreen> {
             child: Column(
               children: [
                 TextField(
-                  focusNode: titleNode,
+                  readOnly: true,
                   cursorColor: Colors.blue,
                   controller: _titleController,
-                  onSubmitted: (val) {
-                    FocusScope.of(context).requestFocus(bodyNode);
-                  },
                   style: TextStyle(
                     fontSize: 30,
                     fontWeight: FontWeight.bold,
@@ -254,7 +205,7 @@ class _EditScreenState extends State<EditScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: TextField(
-                    focusNode: bodyNode,
+                    readOnly: true,
                     cursorColor: Colors.blue,
                     controller: _textEditingController,
                     keyboardType: TextInputType.multiline,
@@ -267,7 +218,7 @@ class _EditScreenState extends State<EditScreen> {
                       color: isDarkMode(context) ? Colors.white : darkModeBlack,
                     ),
                     decoration: InputDecoration.collapsed(
-                      hintText: 'Start typing your note here...',
+                      hintText: '',
                       hintStyle: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.normal,

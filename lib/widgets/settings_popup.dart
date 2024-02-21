@@ -1,14 +1,13 @@
 import 'dart:io';
-
-import 'package:feedback/feedback.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:unmissable/screens/deleted_notes_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/dark_mode_list_tile.dart';
+import 'package:unmissable/widgets/feedback_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';
 import 'package:unmissable/widgets/notification_repeat_interval_list_tile.dart';
 import 'package:unmissable/widgets/sort_notes_list_tile.dart';
@@ -36,7 +35,10 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                leading: const Icon(Icons.widgets),
+                leading: Icon(
+                  Icons.widgets,
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
                 title: Text(
                   "How to use widget?",
                   style: TextStyle(
@@ -85,7 +87,10 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                leading: const Icon(Icons.person),
+                leading: Icon(
+                  Icons.person,
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
                 title: Text(
                   "Sign up & Log in",
                   style: TextStyle(
@@ -93,6 +98,30 @@ void onMoreTap({required BuildContext context}) {
                   ),
                 ),
                 trailing: const CupertinoListTileChevron(),
+              ),
+            ],
+          ),
+          CupertinoListSection.insetGrouped(
+            header: Text(
+              "TRASH",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
+              ),
+            ),
+            children: [
+              CupertinoListTile(
+                leading: const Icon(Icons.delete, color: Colors.red),
+                title: const Text(
+                  "Deleted notes",
+                  style: TextStyle(color: Colors.red),
+                ),
+                trailing: const CupertinoListTileChevron(),
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => const DeletedNotesScreen()));
+                },
               ),
             ],
           ),
@@ -106,46 +135,12 @@ void onMoreTap({required BuildContext context}) {
               ),
             ),
             children: [
+              feedbackListTile(context: context),
               CupertinoListTile(
-                leading: const Icon(Icons.feedback, color: Colors.red),
-                title: const Text("Leave feedback",
-                    style: TextStyle(color: Colors.red)),
-                trailing: const CupertinoListTileChevron(),
-                onTap: () {
-                  Navigator.pop(context);
-                  BetterFeedback.of(context).show(
-                    (UserFeedback feedback) async {
-                      String emailAddress = "jigang1005@gmail.com";
-                      String? encodeQueryParameters(
-                          Map<String, String> params) {
-                        return params.entries
-                            .map((MapEntry<String, String> e) =>
-                                '${Uri.encodeComponent(e.key)}=${Uri.encodeComponent(e.value)}')
-                            .join('&');
-                      }
-
-                      await ImageGallerySaver.saveImage(feedback.screenshot,
-                          name: "Feedback: Unmissable");
-                      final Uri emailLaunchUri = Uri(
-                        scheme: 'mailto',
-                        path: emailAddress,
-                        query: encodeQueryParameters(
-                          <String, String>{
-                            'subject': 'Feedback: Unmissable',
-                            'body':
-                                "${feedback.text} \nsScreenshot is saved on your phone!",
-                          },
-                        ),
-                      );
-                      if (await canLaunchUrl(emailLaunchUri)) {
-                        launchUrl(emailLaunchUri);
-                      }
-                    },
-                  );
-                },
-              ),
-              CupertinoListTile(
-                leading: const Icon(Icons.contact_mail),
+                leading: Icon(
+                  Icons.contact_mail,
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
                 title: Text(
                   "Developer's contact",
                   style: TextStyle(
@@ -167,7 +162,10 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                leading: const Icon(Icons.info),
+                leading: Icon(
+                  Icons.info,
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
                 title: Text(
                   "About",
                   style: TextStyle(

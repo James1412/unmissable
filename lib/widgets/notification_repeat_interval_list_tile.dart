@@ -21,7 +21,10 @@ Widget notificationRepeatIntervalListTile(
     ),
     children: [
       CupertinoListTile(
-        leading: const Icon(CupertinoIcons.bell_fill),
+        leading: Icon(
+          CupertinoIcons.bell_fill,
+          color: isDarkMode(context) ? Colors.white : darkModeBlack,
+        ),
         title: Text(
           "Notification interval",
           style: TextStyle(
@@ -110,7 +113,10 @@ Widget notificationRepeatIntervalListTile(
         },
       ),
       CupertinoListTile(
-        leading: const Icon(CupertinoIcons.bell_slash_fill),
+        leading: Icon(
+          CupertinoIcons.bell_slash_fill,
+          color: isDarkMode(context) ? Colors.white : darkModeBlack,
+        ),
         onTap: () {
           context.read<NotesViewModel>().notificationAllOff();
         },

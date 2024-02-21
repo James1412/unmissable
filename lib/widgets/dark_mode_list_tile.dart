@@ -7,7 +7,10 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 Widget darkModeListTile({required context, required double modalHeight}) {
   return CupertinoListTile(
-    leading: const Icon(Icons.dark_mode),
+    leading: Icon(
+      Icons.dark_mode,
+      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+    ),
     title: Text(
       "Dark mode",
       style: TextStyle(

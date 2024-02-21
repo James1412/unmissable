@@ -9,7 +9,10 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 Widget fontSizeListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListTile(
-    leading: const Icon(Icons.text_increase),
+    leading: Icon(
+      Icons.text_increase,
+      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+    ),
     title: Text(
       "Font size",
       style: TextStyle(

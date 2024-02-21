@@ -10,7 +10,10 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 Widget sortNotesListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListTile(
-    leading: const Icon(Icons.sort),
+    leading: Icon(
+      Icons.sort,
+      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+    ),
     title: Text(
       "Sort notes",
       style: TextStyle(
