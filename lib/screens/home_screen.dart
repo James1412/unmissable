@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             context
                                 .read<NotesViewModel>()
-                                .togglePin(notes[index]);
+                                .togglePin(notes[index], context);
                             pinToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.blue,
@@ -94,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: (context) {
                             context
                                 .read<NotesViewModel>()
-                                .deleteNote(notes[index].uniqueKey);
+                                .deleteNote(notes[index].uniqueKey, context);
                             deleteToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.red,

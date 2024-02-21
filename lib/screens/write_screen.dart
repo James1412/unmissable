@@ -94,6 +94,7 @@ class _WriteScreenState extends State<WriteScreen> {
                                   isPinned: false,
                                   isUnmissable: false,
                                 ),
+                                context,
                               );
                           Navigator.pop(context);
                         },

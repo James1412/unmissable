@@ -46,6 +46,7 @@ class _EditScreenState extends State<EditScreen> {
             ..title = _titleController.text
             ..body = _textEditingController.text
             ..editedDateTime = DateTime.now(),
+          context,
         );
   }
 
@@ -133,7 +134,7 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void onDelete() {
-    context.read<NotesViewModel>().deleteNote(widget.note.uniqueKey);
+    context.read<NotesViewModel>().deleteNote(widget.note.uniqueKey, context);
     deleteToast(fToast: fToast, note: widget.note);
     Navigator.pop(context);
   }
@@ -176,7 +177,9 @@ class _EditScreenState extends State<EditScreen> {
                         ? CupertinoIcons.pin_fill
                         : CupertinoIcons.pin,
                     onTap: () {
-                      context.read<NotesViewModel>().togglePin(widget.note);
+                      context
+                          .read<NotesViewModel>()
+                          .togglePin(widget.note, context);
                       pinToast(fToast: fToast, note: widget.note);
                     },
                   ),
@@ -188,7 +191,7 @@ class _EditScreenState extends State<EditScreen> {
                     onTap: () {
                       context
                           .read<NotesViewModel>()
-                          .toggleUnmissable(widget.note);
+                          .toggleUnmissable(widget.note, context);
                       unmissableToast(fToast: fToast, note: widget.note);
                     },
                   ),
