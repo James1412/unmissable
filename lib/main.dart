@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 
 void main() async {
@@ -18,6 +19,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => DarkModeViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => FontSizeViewModel(),
         ),
       ],
       child: const UnmissableApp(),
