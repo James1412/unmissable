@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
@@ -25,18 +26,6 @@ class _EditScreenState extends State<EditScreen> {
       TextEditingController(text: widget.note.title);
   late final TextEditingController _textEditingController =
       TextEditingController(text: widget.note.body);
-  late FToast fToast;
-  GlobalKey navigatorKey = GlobalKey();
-  @override
-  void initState() {
-    super.initState();
-    fToast = FToast();
-    if (navigatorKey.currentState != null) {
-      fToast.init(navigatorKey.currentState!.context);
-    } else {
-      fToast.init(context);
-    }
-  }
 
   @override
   void dispose() {
@@ -61,10 +50,12 @@ class _EditScreenState extends State<EditScreen> {
       builder: (context) => CupertinoModalPopupSheet(
         height: MediaQuery.of(context).size.height * 0.35,
         child: CupertinoListSection.insetGrouped(
+          additionalDividerMargin: 0.0,
+          dividerMargin: 0.0,
           children: [
             CupertinoListTile(
               title: Text(
-                "Created DateTime",
+                "Created",
                 style: TextStyle(
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
                 ),
@@ -82,7 +73,7 @@ class _EditScreenState extends State<EditScreen> {
             ),
             CupertinoListTile(
               title: Text(
-                "Modified DateTime",
+                "Modified",
                 style: TextStyle(
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
                 ),
@@ -139,7 +130,9 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void onDelete() {
-    deleteToast(fToast: fToast, note: widget.note);
+    if (Platform.isIOS) {
+      HapticFeedback.lightImpact();
+    }
     context.read<NotesViewModel>().deleteNote(widget.note, context);
     Navigator.pop(context);
   }
@@ -159,7 +152,6 @@ class _EditScreenState extends State<EditScreen> {
           }
         },
         child: Scaffold(
-          key: GlobalKey(),
           backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: true,
@@ -183,6 +175,9 @@ class _EditScreenState extends State<EditScreen> {
                         ? CupertinoIcons.pin_fill
                         : CupertinoIcons.pin,
                     onTap: () {
+                      if (Platform.isIOS) {
+                        HapticFeedback.lightImpact();
+                      }
                       context.read<NotesViewModel>().updateNote(
                             widget.note
                               ..title = _titleController.text
@@ -193,7 +188,6 @@ class _EditScreenState extends State<EditScreen> {
                       context
                           .read<NotesViewModel>()
                           .togglePin(widget.note, context);
-                      pinToast(fToast: fToast, note: widget.note);
                     },
                   ),
                   PullDownMenuItem(
@@ -202,6 +196,9 @@ class _EditScreenState extends State<EditScreen> {
                         ? CupertinoIcons.bell_fill
                         : CupertinoIcons.bell,
                     onTap: () {
+                      if (Platform.isIOS) {
+                        HapticFeedback.lightImpact();
+                      }
                       context.read<NotesViewModel>().updateNote(
                             widget.note
                               ..title = _titleController.text
@@ -212,7 +209,6 @@ class _EditScreenState extends State<EditScreen> {
                       context
                           .read<NotesViewModel>()
                           .toggleUnmissable(widget.note, context);
-                      unmissableToast(fToast: fToast, note: widget.note);
                     },
                   ),
                   PullDownMenuItem(

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
+import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
@@ -42,6 +43,7 @@ class NotesViewModel extends ChangeNotifier {
   ];
 
   Future<void> deleteNote(NoteModel noteModel, BuildContext context) async {
+    deleteToast(context, noteModel);
     notes
         .removeWhere((NoteModel note) => note.uniqueKey == noteModel.uniqueKey);
     sortHelper(context);
@@ -62,6 +64,7 @@ class NotesViewModel extends ChangeNotifier {
   }
 
   void togglePin(NoteModel noteModel, BuildContext context) {
+    pinToast(context, noteModel);
     noteModel.isPinned = !noteModel.isPinned;
     sortHelper(context);
     notifyListeners();
@@ -70,6 +73,7 @@ class NotesViewModel extends ChangeNotifier {
   Future<void> toggleUnmissable(
       NoteModel noteModel, BuildContext context) async {
     noteModel.isUnmissable = !noteModel.isUnmissable;
+    unmissableToast(context, noteModel);
     sortHelper(context);
     if (noteModel.isUnmissable) {
       // When unmissable
@@ -90,6 +94,7 @@ class NotesViewModel extends ChangeNotifier {
         }
       },
     );
+    notificationOnHelper(context);
     sortHelper(context);
     notifyListeners();
   }

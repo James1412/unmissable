@@ -4,13 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/edit_screen.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
@@ -25,18 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  late FToast fToast;
-  GlobalKey navigatorKey = GlobalKey();
-  @override
-  void initState() {
-    super.initState();
-    fToast = FToast();
-    if (navigatorKey.currentState != null) {
-      fToast.init(navigatorKey.currentState!.context);
-    } else {
-      fToast.init(context);
-    }
-  }
 
   @override
   void dispose() {
@@ -55,12 +41,14 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
       child: Scaffold(
-        key: GlobalKey(),
         resizeToAvoidBottomInset: false,
         backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         body: ListView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
+            const SizedBox(
+              height: 20,
+            ),
             const AppBarWidget(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
@@ -91,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .toggleUnmissable(notes[index], context);
-                            unmissableToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.yellow,
                           icon: CupertinoIcons.bell_fill,
@@ -105,14 +92,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .togglePin(notes[index], context);
-                            pinToast(fToast: fToast, note: notes[index]);
                           },
                           backgroundColor: Colors.blue,
                           icon: FontAwesomeIcons.thumbtack,
                         ),
                         SlidableAction(
                           onPressed: (context) {
-                            deleteToast(fToast: fToast, note: notes[index]);
                             context
                                 .read<NotesViewModel>()
                                 .deleteNote(notes[index], context);
@@ -147,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? Colors.white
                                   : darkModeBlack,
                               fontSize: fontSize,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                           additionalInfo:

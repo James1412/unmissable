@@ -36,7 +36,6 @@ This app is featured in both IOS app store and Android playstore
 | hive                        | ^2.2.3  |
 | font_awesome                | ^10.7.0 |
 | flutter_slidable            | ^3.0.1  |
-| fluttertoast                | ^8.2.4  |
 | pull_down_button            | ^0.9.3  |
 | intl                        | ^0.19.0 |
 | url_launcher                | ^6.2.4  |

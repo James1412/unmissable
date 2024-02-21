@@ -46,7 +46,11 @@ class UnmissableApp extends StatefulWidget {
 }
 
 class _UnmissableAppState extends State<UnmissableApp> {
-  GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeMode themeMode = context.watch<DarkModeViewModel>().darkMode;
@@ -55,16 +59,6 @@ class _UnmissableAppState extends State<UnmissableApp> {
       theme: lightTheme(),
       darkTheme: darkTheme(),
       themeMode: themeMode,
-      builder: (context, child) => Overlay(
-        initialEntries: [
-          if (child != null) ...[
-            OverlayEntry(
-              builder: (context) => child,
-            ),
-          ]
-        ],
-      ),
-      navigatorKey: navigatorKey,
       home: const NavigationScreen(),
     );
   }
