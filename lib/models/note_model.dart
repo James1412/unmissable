@@ -5,6 +5,7 @@ class NoteModel {
   DateTime createdDateTime;
   DateTime editedDateTime;
   bool isPinned;
+  bool isUnmissable;
 
   NoteModel({
     required this.uniqueKey,
@@ -13,5 +14,6 @@ class NoteModel {
     required this.createdDateTime,
     required this.editedDateTime,
     required this.isPinned,
+    required this.isUnmissable,
   });
 }

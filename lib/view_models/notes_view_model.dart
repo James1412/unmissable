@@ -10,6 +10,7 @@ class NotesViewModel with ChangeNotifier {
       createdDateTime: DateTime.now().subtract(const Duration(days: 1)),
       editedDateTime: DateTime.now().subtract(const Duration(hours: 1)),
       isPinned: true,
+      isUnmissable: false,
     ),
     NoteModel(
       uniqueKey: UniqueKey().hashCode,
@@ -18,6 +19,7 @@ class NotesViewModel with ChangeNotifier {
       createdDateTime: DateTime.now().subtract(const Duration(days: 3)),
       editedDateTime: DateTime.now().subtract(const Duration(hours: 2)),
       isPinned: false,
+      isUnmissable: false,
     ),
     NoteModel(
       uniqueKey: UniqueKey().hashCode,
@@ -26,6 +28,7 @@ class NotesViewModel with ChangeNotifier {
       createdDateTime: DateTime.now().subtract(const Duration(days: 10)),
       editedDateTime: DateTime.now().subtract(const Duration(hours: 3)),
       isPinned: false,
+      isUnmissable: false,
     ),
   ];
 
@@ -43,6 +46,12 @@ class NotesViewModel with ChangeNotifier {
 
   void togglePin(NoteModel noteModel) {
     noteModel.isPinned = !noteModel.isPinned;
+    sortHelper();
+    notifyListeners();
+  }
+
+  void toggleUnmissable(NoteModel noteModel) {
+    noteModel.isUnmissable = !noteModel.isUnmissable;
     sortHelper();
     notifyListeners();
   }

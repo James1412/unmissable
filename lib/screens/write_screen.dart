@@ -49,7 +49,7 @@ class _WriteScreenState extends State<WriteScreen> {
           title: TextField(
             cursorColor: Colors.blue,
             controller: _titleController,
-            style: const TextStyle(fontSize: 25),
+            style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             decoration: const InputDecoration.collapsed(hintText: 'Title'),
           ),
           actions: [
@@ -74,12 +74,14 @@ class _WriteScreenState extends State<WriteScreen> {
                         onPressed: () {
                           context.read<NotesViewModel>().addNote(
                                 NoteModel(
-                                    uniqueKey: UniqueKey().hashCode,
-                                    title: _titleController.text,
-                                    body: _textEditingController.text,
-                                    createdDateTime: DateTime.now(),
-                                    editedDateTime: DateTime.now(),
-                                    isPinned: false),
+                                  uniqueKey: UniqueKey().hashCode,
+                                  title: _titleController.text,
+                                  body: _textEditingController.text,
+                                  createdDateTime: DateTime.now(),
+                                  editedDateTime: DateTime.now(),
+                                  isPinned: false,
+                                  isUnmissable: false,
+                                ),
                               );
                           Navigator.pop(context);
                         },
@@ -103,7 +105,10 @@ class _WriteScreenState extends State<WriteScreen> {
                 padding: EdgeInsets.all(15.0),
                 child: Text(
                   "Done",
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red),
                 ),
               ),
             )

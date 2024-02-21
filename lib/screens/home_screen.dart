@@ -134,12 +134,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: InkWell(
                       onTap: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => EditScreen(
-                                note: notes[index],
-                              ),
-                            ));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EditScreen(
+                              note: notes[index],
+                            ),
+                          ),
+                        );
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
