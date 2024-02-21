@@ -42,6 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void deleteSearchResult(NoteModel note) {
+    searchResults.remove(note);
+  }
+
   FocusNode focusNode = FocusNode();
 
   @override
@@ -126,6 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             context
                                 .read<NotesViewModel>()
                                 .deleteNote(notes[index], context);
+                            deleteSearchResult(notes[index]);
                           },
                           backgroundColor: Colors.red,
                           icon: FontAwesomeIcons.trash,
@@ -138,6 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => EditScreen(
+                              deleteSearch: deleteSearchResult,
                               note: notes[index],
                             ),
                           ),

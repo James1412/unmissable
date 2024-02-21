@@ -115,7 +115,7 @@ Widget notificationRepeatIntervalListTile(
           context.read<NotesViewModel>().notificationAllOff();
         },
         title: Text(
-          "Cancel all notifications",
+          "Clear all notifications",
           style: TextStyle(
             color: isDarkMode(context) ? Colors.white : darkModeBlack,
           ),
