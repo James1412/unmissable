@@ -31,38 +31,65 @@ class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
         ),
       ),
       clipBehavior: Clip.hardEdge,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Align(
-              alignment: Alignment.topRight,
-              child: Material(
-                type: MaterialType.transparency,
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      if (Platform.isIOS) {
-                        HapticFeedback.lightImpact();
-                      }
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      "Done",
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
+      child: CustomScrollView(
+        slivers: [
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: CustomDelegate(),
+          ),
+          SliverToBoxAdapter(
+            child: widget.child,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomDelegate extends SliverPersistentHeaderDelegate {
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: isDarkMode(context)
+          ? darkModeBlack
+          : CupertinoColors.systemGroupedBackground,
+      child: Align(
+        alignment: Alignment.topRight,
+        child: Material(
+          type: MaterialType.transparency,
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: GestureDetector(
+              onTap: () {
+                if (Platform.isIOS) {
+                  HapticFeedback.lightImpact();
+                }
+                Navigator.pop(context);
+              },
+              child: const Text(
+                "Done",
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
                 ),
               ),
             ),
-            widget.child,
-          ],
+          ),
         ),
       ),
     );
+  }
+
+  @override
+  double get maxExtent => 50;
+
+  @override
+  double get minExtent => 50;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }

@@ -59,7 +59,9 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                 widget.onQueryChanged();
               },
               controller: widget.textEditingController,
-              backgroundColor: isDarkMode(context) ? darkModeGrey : null,
+              backgroundColor: isDarkMode(context) ? lessdarkBlack : null,
+              style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack),
               itemColor: isDarkMode(context)
                   ? Colors.white
                   : CupertinoColors.secondaryLabel,
