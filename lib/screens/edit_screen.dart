@@ -199,11 +199,6 @@ class _EditScreenState extends State<EditScreen> {
                     autofocus: true,
                     maxLines: null,
                     minLines: 7,
-                    onChanged: (text) {
-                      setState(() {
-                        _textEditingController.text = text;
-                      });
-                    },
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.normal,
