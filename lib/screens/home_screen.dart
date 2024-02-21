@@ -9,7 +9,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/edit_screen.dart';
+import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/utils/toasts.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/appbar_widget.dart';
 
@@ -47,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         body: ListView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
@@ -60,15 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: ListView.separated(
                   controller: _scrollController,
                   itemCount: notes.length,
-                  separatorBuilder: (context, index) => Opacity(
-                    opacity: 0.15,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Container(
-                        height: 1,
-                        color: Colors.black,
-                        width: double.maxFinite,
-                      ),
+                  separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    child: Container(
+                      height: 1,
+                      color:
+                          isDarkMode(context) ? darkModeGrey : Colors.black12,
+                      width: double.maxFinite,
                     ),
                   ),
                   itemBuilder: (context, index) => Slidable(
@@ -120,6 +120,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           title: Text(
                             notes[index].title,
+                            style: TextStyle(
+                              color: isDarkMode(context)
+                                  ? Colors.white
+                                  : darkModeBlack,
+                            ),
                           ),
                           additionalInfo: notes[index].isPinned
                               ? FaIcon(
@@ -128,8 +133,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   size: 15,
                                 )
                               : null,
-                          subtitle:
-                              Text(notes[index].body.replaceAll('\n', '')),
+                          subtitle: Text(
+                            notes[index].body.replaceAll('\n', ''),
+                            style: TextStyle(
+                              color: darkModeGrey,
+                            ),
+                          ),
                         ),
                       ),
                     ),

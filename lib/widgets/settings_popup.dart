@@ -3,8 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
-import 'package:unmissable/utils/enums.dart';
+import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/dark_mode_list_tile.dart';
@@ -22,20 +21,23 @@ void onMoreTap({required BuildContext context}) {
       child: Column(
         children: [
           CupertinoListSection.insetGrouped(
-            header: const Opacity(
-              opacity: 0.6,
-              child: Text(
-                "WIDGET",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
+            header: Text(
+              "WIDGET",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
               ),
             ),
             children: [
               CupertinoListTile(
                 leading: const Icon(Icons.widgets),
-                title: const Text("How to use widget?"),
+                title: Text(
+                  "How to use widget?",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
                 trailing: const CupertinoListTileChevron(),
                 onTap: () async {
                   if (Platform.isAndroid) {
@@ -51,89 +53,106 @@ void onMoreTap({required BuildContext context}) {
             ],
           ),
           CupertinoListSection.insetGrouped(
-            header: const Opacity(
-              opacity: 0.6,
-              child: Text(
-                "STYLE",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
+            header: Text(
+              "STYLE",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
               ),
             ),
             children: [
               darkModeListTile(context: context, modalHeight: modalHeight),
-              const CupertinoListTile(
-                leading: Icon(Icons.text_increase),
-                title: Text("Font size"),
-                trailing: CupertinoListTileChevron(),
+              CupertinoListTile(
+                leading: const Icon(Icons.text_increase),
+                title: Text(
+                  "Font size",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
+                trailing: const CupertinoListTileChevron(),
               ),
-              const CupertinoListTile(
-                leading: Icon(Icons.sort),
-                title: Text("Sort notes"),
-                trailing: CupertinoListTileChevron(),
+              CupertinoListTile(
+                leading: const Icon(Icons.sort),
+                title: Text(
+                  "Sort notes",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
+                trailing: const CupertinoListTileChevron(),
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
-            header: const Opacity(
-              opacity: 0.6,
-              child: Text(
-                "ACCOUNT",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
+            header: Text(
+              "ACCOUNT",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
               ),
             ),
-            children: const [
+            children: [
               CupertinoListTile(
-                leading: Icon(Icons.person),
-                title: Text("Sign up & Log in"),
-                trailing: CupertinoListTileChevron(),
+                leading: const Icon(Icons.person),
+                title: Text(
+                  "Sign up & Log in",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
+                trailing: const CupertinoListTileChevron(),
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
-            header: const Opacity(
-              opacity: 0.6,
-              child: Text(
-                "FEEDBACK",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
+            header: Text(
+              "FEEDBACK",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
               ),
             ),
-            children: const [
-              CupertinoListTile(
+            children: [
+              const CupertinoListTile(
                 leading: Icon(Icons.feedback, color: Colors.red),
                 title:
                     Text("Leave feedback", style: TextStyle(color: Colors.red)),
                 trailing: CupertinoListTileChevron(),
               ),
               CupertinoListTile(
-                leading: Icon(Icons.contact_mail),
-                title: Text("Developer's contact"),
-                trailing: CupertinoListTileChevron(),
+                leading: const Icon(Icons.contact_mail),
+                title: Text(
+                  "Developer's contact",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
+                trailing: const CupertinoListTileChevron(),
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
-            header: const Opacity(
-              opacity: 0.6,
-              child: Text(
-                "ABOUT",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
+            header: Text(
+              "ABOUT",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
               ),
             ),
             children: [
               CupertinoListTile(
                 leading: const Icon(Icons.info),
-                title: const Text("About"),
+                title: Text(
+                  "About",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
                 trailing: const CupertinoListTileChevron(),
                 onTap: () {
                   showAboutDialog(

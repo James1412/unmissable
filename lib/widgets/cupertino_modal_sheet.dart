@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 
 class CupertinoModalPopupSheet extends StatefulWidget {
   final Widget child;
@@ -20,9 +22,11 @@ class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
   Widget build(BuildContext context) {
     return Container(
       height: widget.height,
-      decoration: const BoxDecoration(
-        color: CupertinoColors.systemGroupedBackground,
-        borderRadius: BorderRadius.vertical(
+      decoration: BoxDecoration(
+        color: isDarkMode(context)
+            ? darkModeBlack
+            : CupertinoColors.systemGroupedBackground,
+        borderRadius: const BorderRadius.vertical(
           top: Radius.circular(10),
         ),
       ),

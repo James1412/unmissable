@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/utils/toasts.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
@@ -54,40 +56,72 @@ class _EditScreenState extends State<EditScreen> {
         child: CupertinoListSection.insetGrouped(
           children: [
             CupertinoListTile(
-              title: const Text("Created DateTime"),
+              title: Text(
+                "Created DateTime",
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
+              ),
               trailing: Material(
                 type: MaterialType.transparency,
                 child: Text(
                   DateFormat('yyyy-MM-dd hh:mma')
                       .format(widget.note.createdDateTime),
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
                 ),
               ),
             ),
             CupertinoListTile(
-              title: const Text("Modified DateTime"),
+              title: Text(
+                "Modified DateTime",
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
+              ),
               trailing: Material(
                 type: MaterialType.transparency,
                 child: Text(
                   DateFormat('yyyy-MM-dd hh:mma')
                       .format(widget.note.editedDateTime),
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
                 ),
               ),
             ),
             CupertinoListTile(
-              title: const Text("Characters"),
+              title: Text(
+                "Characters",
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
+              ),
               trailing: Material(
                 type: MaterialType.transparency,
                 child: Text(
                   _textEditingController.text.length.toString(),
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
                 ),
               ),
             ),
             CupertinoListTile(
-              title: const Text("Words"),
+              title: Text(
+                "Words",
+                style: TextStyle(
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
+              ),
               trailing: Material(
                 type: MaterialType.transparency,
                 child: Text(
                   _textEditingController.text.split(' ').length.toString(),
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
                 ),
               ),
             ),
@@ -117,18 +151,19 @@ class _EditScreenState extends State<EditScreen> {
           }
         },
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: true,
-            shadowColor: Colors.white,
-            surfaceTintColor: Colors.white,
-            backgroundColor: Colors.white,
+            shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
+            surfaceTintColor:
+                isDarkMode(context) ? darkModeBlack : Colors.white,
+            backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
             actions: [
               CupertinoButton(
                 onPressed: onInfoTap,
-                child: const Icon(
+                child: Icon(
                   Icons.info_outline,
-                  color: Colors.black,
+                  color: isDarkMode(context) ? darkModeGrey : Colors.black,
                 ),
               ),
               PullDownButton(
@@ -165,9 +200,9 @@ class _EditScreenState extends State<EditScreen> {
                 buttonBuilder: (context, showMenu) => CupertinoButton(
                   onPressed: showMenu,
                   padding: const EdgeInsets.all(15),
-                  child: const Icon(
+                  child: Icon(
                     CupertinoIcons.ellipsis_circle,
-                    color: Colors.black,
+                    color: isDarkMode(context) ? darkModeGrey : Colors.black,
                   ),
                 ),
               ),

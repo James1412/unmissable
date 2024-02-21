@@ -3,7 +3,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
-import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
@@ -37,16 +36,12 @@ class _UnmissableAppState extends State<UnmissableApp> {
   GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
-    DarkMode darkMode = context.watch<DarkModeViewModel>().darkMode;
+    ThemeMode themeMode = context.watch<DarkModeViewModel>().darkMode;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       darkTheme: darkTheme(),
-      themeMode: darkMode == DarkMode.system
-          ? ThemeMode.system
-          : darkMode == DarkMode.light
-              ? ThemeMode.light
-              : ThemeMode.dark,
+      themeMode: themeMode,
       builder: FToastBuilder(),
       navigatorKey: navigatorKey,
       home: const NavigationScreen(),

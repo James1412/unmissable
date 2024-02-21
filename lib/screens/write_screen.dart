@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 
 class WriteScreen extends StatefulWidget {
@@ -44,11 +46,11 @@ class _WriteScreenState extends State<WriteScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         appBar: AppBar(
-          shadowColor: Colors.white,
-          surfaceTintColor: Colors.white,
-          backgroundColor: Colors.white,
+          shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
+          surfaceTintColor: isDarkMode(context) ? darkModeBlack : Colors.white,
+          backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           title: TextField(
             onSubmitted: (val) {
               FocusScope.of(context).requestFocus(bodyNode);

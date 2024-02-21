@@ -6,6 +6,8 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unmissable/screens/home_screen.dart';
 import 'package:unmissable/screens/write_screen.dart';
+import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});
@@ -36,7 +38,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
       resizeToAvoidBottomInset: false,
       body: screens[_index],
       bottomSheet: Container(
-        color: Colors.white,
+        color: isDarkMode(context) ? darkModeBlack : Colors.white,
         height: 75,
         child: Row(
           children: [

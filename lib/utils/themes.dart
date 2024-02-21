@@ -23,3 +23,7 @@ ThemeData darkTheme() {
     ),
   );
 }
+
+Color darkModeBlack = const Color(0xff1C1C1E);
+Color darkModeGrey = const Color(0xff8E8E93);
+Color headerGreyColor = Colors.black38;

@@ -1,11 +1,19 @@
-import 'package:flutter/cupertino.dart';
-import 'package:unmissable/utils/enums.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DarkModeViewModel extends ChangeNotifier {
-  DarkMode darkMode = DarkMode.system;
+  ThemeMode darkMode = ThemeMode.system;
 
-  void setDarkMode(DarkMode mode) {
+  void setDarkMode(ThemeMode mode) {
     darkMode = mode;
     notifyListeners();
+  }
+}
+
+bool isDarkMode(BuildContext context) {
+  if (context.watch<DarkModeViewModel>().darkMode == ThemeMode.system) {
+    return MediaQuery.of(context).platformBrightness == Brightness.dark;
+  } else {
+    return context.watch<DarkModeViewModel>().darkMode == ThemeMode.dark;
   }
 }
