@@ -12,7 +12,7 @@ import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
-import 'package:unmissable/widgets/appbar_widget.dart';
+import 'package:unmissable/widgets/app_bar_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,17 +23,38 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-
+  final TextEditingController _textEditingController = TextEditingController();
+  late List<NoteModel> searchResults = [];
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
   }
 
+  void onQueryChanged() {
+    setState(() {
+      searchResults = Provider.of<NotesViewModel>(context, listen: false)
+          .notes
+          .where((element) => (element.title + element.body)
+              .toLowerCase()
+              .contains(_textEditingController.text))
+          .toList();
+    });
+  }
+
+  FocusNode focusNode = FocusNode();
+
   @override
   Widget build(BuildContext context) {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
+    if (focusNode.hasPrimaryFocus) {
+      notes = searchResults;
+    }
+    if (_textEditingController.text.isEmpty ||
+        _textEditingController.text == "") {
+      notes = context.watch<NotesViewModel>().notes;
+    }
     return GestureDetector(
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
@@ -49,7 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const AppBarWidget(),
+            AppBarWidget(
+              focusNode: focusNode,
+              onQueryChanged: onQueryChanged,
+              textEditingController: _textEditingController,
+            ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: Scrollbar(

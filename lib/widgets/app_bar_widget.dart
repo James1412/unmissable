@@ -6,13 +6,26 @@ import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/settings_popup.dart';
 
 class AppBarWidget extends StatefulWidget {
-  const AppBarWidget({super.key});
+  final TextEditingController textEditingController;
+  final Function onQueryChanged;
+  final FocusNode focusNode;
+  const AppBarWidget(
+      {super.key,
+      required this.textEditingController,
+      required this.onQueryChanged,
+      required this.focusNode});
 
   @override
   State<AppBarWidget> createState() => _AppBarWidgetState();
 }
 
 class _AppBarWidgetState extends State<AppBarWidget> {
+  @override
+  void dispose() {
+    widget.textEditingController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -41,6 +54,11 @@ class _AppBarWidgetState extends State<AppBarWidget> {
               height: 10,
             ),
             CupertinoSearchTextField(
+              focusNode: widget.focusNode,
+              onChanged: (val) {
+                widget.onQueryChanged();
+              },
+              controller: widget.textEditingController,
               backgroundColor: isDarkMode(context) ? darkModeGrey : null,
               itemColor: isDarkMode(context)
                   ? Colors.white
