@@ -8,6 +8,7 @@ import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/dark_mode_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';
+import 'package:unmissable/widgets/notification_repeat_interval_list_tile.dart';
 import 'package:unmissable/widgets/sort_notes_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,6 +70,8 @@ void onMoreTap({required BuildContext context}) {
               sortNotesListTile(context: context, modalHeight: modalHeight),
             ],
           ),
+          notificationRepeatIntervalListTile(
+              context: context, modalHeight: modalHeight),
           CupertinoListSection.insetGrouped(
             header: Text(
               "ACCOUNT",

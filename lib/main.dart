@@ -7,6 +7,7 @@ import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
+import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 void main() async {
@@ -27,6 +28,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => SortNotesViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotificationIntervalViewModel(),
         ),
       ],
       child: const UnmissableApp(),

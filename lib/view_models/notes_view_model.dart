@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
+import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 class NotesViewModel extends ChangeNotifier {
@@ -55,7 +56,7 @@ class NotesViewModel extends ChangeNotifier {
     notes.add(noteModel);
     sortHelper(context);
     if (noteModel.isUnmissable) {
-      await notificationOnHelper();
+      await notificationOnHelper(context);
     }
     notifyListeners();
   }
@@ -72,7 +73,7 @@ class NotesViewModel extends ChangeNotifier {
     sortHelper(context);
     if (noteModel.isUnmissable) {
       // When unmissable
-      await notificationOnHelper();
+      await notificationOnHelper(context);
     } else if (!noteModel.isUnmissable) {
       // When cancelled unmissable
       await NotificationService()
@@ -93,7 +94,10 @@ class NotesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> notificationOnHelper() async {
+  Future<void> notificationOnHelper(BuildContext context) async {
+    RepeatInterval interval =
+        Provider.of<NotificationIntervalViewModel>(context, listen: false)
+            .interval;
     for (NoteModel noteModel in notes) {
       if (noteModel.isUnmissable) {
         await NotificationService().showNotification(
@@ -105,10 +109,16 @@ class NotesViewModel extends ChangeNotifier {
           title: noteModel.title,
           body: noteModel.body,
           id: noteModel.uniqueKey,
-          repeatInterval: RepeatInterval.hourly,
+          repeatInterval: interval,
         );
       }
     }
+  }
+
+  Future<void> notificationAllOff() async {
+    await NotificationService().cancelAllNotification();
+    notes = notes.map((NoteModel note) => note..isUnmissable = false).toList();
+    notifyListeners();
   }
 
   void sortHelper(BuildContext context) {

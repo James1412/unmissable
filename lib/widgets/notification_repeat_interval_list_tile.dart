@@ -1,0 +1,126 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
+import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/view_models/notes_view_model.dart';
+import 'package:unmissable/view_models/notification_interval_vm.dart';
+import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
+
+Widget notificationRepeatIntervalListTile(
+    {required BuildContext context, required double modalHeight}) {
+  return CupertinoListSection.insetGrouped(
+    header: Text(
+      "NOTIFICATION",
+      style: TextStyle(
+        fontSize: 14,
+        fontWeight: FontWeight.normal,
+        color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
+      ),
+    ),
+    children: [
+      CupertinoListTile(
+        leading: const Icon(CupertinoIcons.bell_fill),
+        title: Text(
+          "Notification interval",
+          style: TextStyle(
+            color: isDarkMode(context) ? Colors.white : darkModeBlack,
+          ),
+        ),
+        trailing: const CupertinoListTileChevron(),
+        onTap: () {
+          showCupertinoModalPopup(
+            context: context,
+            builder: (context) => StatefulBuilder(
+              builder: (context, setState) {
+                RepeatInterval interval =
+                    Provider.of<NotificationIntervalViewModel>(context,
+                            listen: false)
+                        .interval;
+                return CupertinoModalPopupSheet(
+                  height: modalHeight,
+                  child: CupertinoListSection.insetGrouped(
+                    additionalDividerMargin: 0.0,
+                    dividerMargin: 0.0,
+                    children: [
+                      CupertinoListTile(
+                        onTap: () {
+                          context
+                              .read<NotificationIntervalViewModel>()
+                              .setInterval(RepeatInterval.everyMinute, context);
+                          setState(() {});
+                        },
+                        title: Text(
+                          "Every minute",
+                          style: TextStyle(
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : darkModeBlack,
+                          ),
+                        ),
+                        trailing: interval == RepeatInterval.everyMinute
+                            ? const Icon(CupertinoIcons.check_mark)
+                            : null,
+                      ),
+                      CupertinoListTile(
+                        onTap: () {
+                          context
+                              .read<NotificationIntervalViewModel>()
+                              .setInterval(RepeatInterval.hourly, context);
+                          setState(() {});
+                        },
+                        title: Text(
+                          "Hourly",
+                          style: TextStyle(
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : darkModeBlack,
+                          ),
+                        ),
+                        trailing: interval == RepeatInterval.hourly
+                            ? const Icon(CupertinoIcons.check_mark)
+                            : null,
+                      ),
+                      CupertinoListTile(
+                        onTap: () {
+                          context
+                              .read<NotificationIntervalViewModel>()
+                              .setInterval(RepeatInterval.daily, context);
+                          setState(() {});
+                        },
+                        title: Text(
+                          "Daily",
+                          style: TextStyle(
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : darkModeBlack,
+                          ),
+                        ),
+                        trailing: interval == RepeatInterval.daily
+                            ? const Icon(CupertinoIcons.check_mark)
+                            : null,
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        },
+      ),
+      CupertinoListTile(
+        leading: const Icon(CupertinoIcons.bell_slash_fill),
+        onTap: () {
+          context.read<NotesViewModel>().notificationAllOff();
+        },
+        title: Text(
+          "Cancel all notifications",
+          style: TextStyle(
+            color: isDarkMode(context) ? Colors.white : darkModeBlack,
+          ),
+        ),
+      ),
+    ],
+  );
+}
