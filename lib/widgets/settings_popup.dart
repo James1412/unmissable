@@ -3,7 +3,11 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import 'package:unmissable/utils/enums.dart';
+import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
+import 'package:unmissable/widgets/dark_mode_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 void onMoreTap({required BuildContext context}) {
@@ -58,20 +62,7 @@ void onMoreTap({required BuildContext context}) {
               ),
             ),
             children: [
-              CupertinoListTile(
-                leading: const Icon(Icons.dark_mode),
-                title: const Text("Dark mode"),
-                onTap: () {
-                  showCupertinoModalPopup(
-                    context: context,
-                    builder: (context) => CupertinoModalPopupSheet(
-                      height: modalHeight,
-                      child: Container(),
-                    ),
-                  );
-                },
-                trailing: const CupertinoListTileChevron(),
-              ),
+              darkModeListTile(context: context, modalHeight: modalHeight),
               const CupertinoListTile(
                 leading: Icon(Icons.text_increase),
                 title: Text("Font size"),
@@ -125,6 +116,31 @@ void onMoreTap({required BuildContext context}) {
                 leading: Icon(Icons.contact_mail),
                 title: Text("Developer's contact"),
                 trailing: CupertinoListTileChevron(),
+              ),
+            ],
+          ),
+          CupertinoListSection.insetGrouped(
+            header: const Opacity(
+              opacity: 0.6,
+              child: Text(
+                "ABOUT",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ),
+            children: [
+              CupertinoListTile(
+                leading: const Icon(Icons.info),
+                title: const Text("About"),
+                trailing: const CupertinoListTileChevron(),
+                onTap: () {
+                  showAboutDialog(
+                    context: context,
+                    applicationName: "Unmissable",
+                  );
+                },
               ),
             ],
           ),

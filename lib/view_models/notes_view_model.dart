@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:unmissable/models/note_model.dart';
 
-class NotesViewModel with ChangeNotifier {
+class NotesViewModel extends ChangeNotifier {
   List<NoteModel> notes = [
     NoteModel(
       uniqueKey: UniqueKey().hashCode,
