@@ -34,7 +34,7 @@ Widget sortNotesListTile(
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
-                        .setSorting(SortNotes.modifiedDateTime);
+                        .setSorting(SortNotes.modifiedDateTime, context);
                     setState(() {});
                   },
                   title: Text(
@@ -51,7 +51,7 @@ Widget sortNotesListTile(
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
-                        .setSorting(SortNotes.createdDateTime);
+                        .setSorting(SortNotes.createdDateTime, context);
                     setState(() {});
                   },
                   title: Text(
@@ -68,7 +68,7 @@ Widget sortNotesListTile(
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
-                        .setSorting(SortNotes.alphabetical);
+                        .setSorting(SortNotes.alphabetical, context);
                     setState(() {});
                   },
                   title: Text(
