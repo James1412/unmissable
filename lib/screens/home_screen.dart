@@ -12,6 +12,7 @@ import 'package:unmissable/screens/edit_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/appbar_widget.dart';
 
@@ -41,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
+    double fontSize = context.watch<FontSizeViewModel>().fontSize;
     return GestureDetector(
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
@@ -124,6 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: isDarkMode(context)
                                   ? Colors.white
                                   : darkModeBlack,
+                              fontSize: fontSize,
                             ),
                           ),
                           additionalInfo: notes[index].isPinned
@@ -137,6 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             notes[index].body.replaceAll('\n', ''),
                             style: TextStyle(
                               color: darkModeGrey,
+                              fontSize: fontSize - 3,
                             ),
                           ),
                         ),

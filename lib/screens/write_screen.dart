@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 
 class WriteScreen extends StatefulWidget {
@@ -39,6 +40,7 @@ class _WriteScreenState extends State<WriteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = context.watch<FontSizeViewModel>().fontSize;
     return GestureDetector(
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
@@ -134,14 +136,14 @@ class _WriteScreenState extends State<WriteScreen> {
             autofocus: true,
             maxLines: null,
             minLines: 7,
-            style: const TextStyle(
-              fontSize: 16.0,
+            style: TextStyle(
+              fontSize: fontSize,
               fontWeight: FontWeight.normal,
             ),
-            decoration: const InputDecoration.collapsed(
+            decoration: InputDecoration.collapsed(
               hintText: 'Start typing your note here...',
               hintStyle: TextStyle(
-                fontSize: 16.0,
+                fontSize: fontSize,
                 fontWeight: FontWeight.normal,
                 color: Colors.grey,
               ),

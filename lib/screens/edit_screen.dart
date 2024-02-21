@@ -8,6 +8,7 @@ import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/utils/toasts.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
@@ -142,6 +143,7 @@ class _EditScreenState extends State<EditScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double fontSize = context.watch<FontSizeViewModel>().fontSize;
     return PopScope(
       onPopInvoked: (val) => onPop(),
       child: GestureDetector(
@@ -234,14 +236,14 @@ class _EditScreenState extends State<EditScreen> {
                     autofocus: true,
                     maxLines: null,
                     minLines: 7,
-                    style: const TextStyle(
-                      fontSize: 16.0,
+                    style: TextStyle(
+                      fontSize: fontSize,
                       fontWeight: FontWeight.normal,
                     ),
-                    decoration: const InputDecoration.collapsed(
+                    decoration: InputDecoration.collapsed(
                       hintText: 'Start typing your note here...',
                       hintStyle: TextStyle(
-                        fontSize: 16.0,
+                        fontSize: fontSize,
                         fontWeight: FontWeight.normal,
                         color: Colors.grey,
                       ),
