@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';

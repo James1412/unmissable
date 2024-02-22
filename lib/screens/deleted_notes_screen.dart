@@ -9,7 +9,6 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/view_screen.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 
@@ -41,6 +40,20 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
         shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         surfaceTintColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         foregroundColor: isDarkMode(context) ? Colors.white : darkModeBlack,
+        actions: [
+          GestureDetector(
+            onTap: () {
+              context.read<DeletedNotesViewModel>().deleteAllNotes();
+            },
+            child: const Padding(
+              padding: EdgeInsets.all(15.0),
+              child: Text(
+                "Delete all",
+                style: TextStyle(color: Colors.red),
+              ),
+            ),
+          ),
+        ],
       ),
       body: ListView.separated(
         controller: _scrollController,

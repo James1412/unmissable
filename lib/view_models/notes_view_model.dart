@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/repos/notes_repository.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/utils/toasts.dart';
@@ -13,35 +14,9 @@ import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 class NotesViewModel extends ChangeNotifier {
-  List<NoteModel> notes = [
-    NoteModel(
-      uniqueKey: UniqueKey().hashCode,
-      title: "title1",
-      body: "body1",
-      createdDateTime: DateTime.now().subtract(const Duration(days: 1)),
-      editedDateTime: DateTime.now().subtract(const Duration(hours: 1)),
-      isPinned: true,
-      isUnmissable: false,
-    ),
-    NoteModel(
-      uniqueKey: UniqueKey().hashCode,
-      title: "title2",
-      body: "body2",
-      createdDateTime: DateTime.now().subtract(const Duration(days: 3)),
-      editedDateTime: DateTime.now().subtract(const Duration(hours: 2)),
-      isPinned: false,
-      isUnmissable: false,
-    ),
-    NoteModel(
-      uniqueKey: UniqueKey().hashCode,
-      title: "title3",
-      body: "body3",
-      createdDateTime: DateTime.now().subtract(const Duration(days: 10)),
-      editedDateTime: DateTime.now().subtract(const Duration(hours: 3)),
-      isPinned: false,
-      isUnmissable: false,
-    ),
-  ];
+  final db = NoteRepository();
+
+  late List<NoteModel> notes = db.getNotes();
 
   Future<void> deleteNote(NoteModel noteModel, BuildContext context) async {
     deleteToast(context, noteModel);
@@ -53,11 +28,13 @@ class NotesViewModel extends ChangeNotifier {
           .cancelScheduledNotification(noteModel.uniqueKey);
     }
     context.read<DeletedNotesViewModel>().addNote(noteModel);
+    db.removeNote(noteModel);
     notifyListeners();
   }
 
   Future<void> addNote(NoteModel noteModel, BuildContext context) async {
     notes.add(noteModel);
+    db.addOrUpdateNote(noteModel);
     sortHelper(context);
     if (noteModel.isUnmissable) {
       await notificationOnHelper(context);
@@ -69,6 +46,7 @@ class NotesViewModel extends ChangeNotifier {
     pinToast(context, noteModel);
     noteModel.isPinned = !noteModel.isPinned;
     sortHelper(context);
+    db.addOrUpdateNote(noteModel);
     notifyListeners();
   }
 
@@ -76,6 +54,7 @@ class NotesViewModel extends ChangeNotifier {
       NoteModel noteModel, BuildContext context) async {
     noteModel.isUnmissable = !noteModel.isUnmissable;
     unmissableToast(context, noteModel);
+    db.addOrUpdateNote(noteModel);
     sortHelper(context);
     if (noteModel.isUnmissable) {
       // When unmissable
@@ -96,6 +75,7 @@ class NotesViewModel extends ChangeNotifier {
         }
       },
     );
+    db.addOrUpdateNote(noteModel);
     notificationOnHelper(context);
     sortHelper(context);
     notifyListeners();

@@ -2,6 +2,7 @@ import 'package:feedback/feedback.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
@@ -13,16 +14,21 @@ import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+Future<void> initApp() async {
   await Hive.initFlutter();
   Hive.registerAdapter(SortNotesAdapter());
+  Hive.registerAdapter(NoteModelAdapter());
   await Hive.openBox(fontSizeBoxName);
   await Hive.openBox(sortNotesBoxName);
-  await Hive.openBox(notesBoxName);
-  await Hive.openBox(deletedNotesBoxName);
+  await Hive.openBox<NoteModel>(notesBoxName);
+  await Hive.openBox<NoteModel>(deletedNotesBoxName);
   await Hive.openBox(notificationIntervalBoxName);
   await NotificationService().initNotification();
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initApp();
   runApp(
     MultiProvider(
       providers: [

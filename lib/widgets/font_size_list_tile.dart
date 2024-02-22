@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
@@ -27,12 +26,23 @@ Widget fontSizeListTile(
           height: modalHeight,
           child: Column(
             children: [
-              Text(
-                "A, a",
-                style: TextStyle(
-                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
-                  fontSize: context.watch<FontSizeViewModel>().fontSize,
+              const SizedBox(
+                height: 50,
+              ),
+              SizedBox(
+                height: 40,
+                width: double.maxFinite,
+                child: Text(
+                  "A, a",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                    fontSize: context.watch<FontSizeViewModel>().fontSize,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+              ),
+              const SizedBox(
+                height: 50,
               ),
               CupertinoListSection.insetGrouped(
                 header: Text(
