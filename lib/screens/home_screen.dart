@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/edit_screen.dart';
+import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
@@ -43,6 +45,30 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void deleteSearchResult(NoteModel note) {
     searchResults.remove(note);
+  }
+
+  final firstTimeBox = Hive.box(firstTimeBoxName);
+  @override
+  void initState() {
+    super.initState();
+    if (firstTimeBox.get(firstTimeBoxName) == null) {
+      final key = UniqueKey().hashCode;
+      Hive.box(notesBoxName).put(
+        key,
+        NoteModel(
+            uniqueKey: key,
+            title: "Welcome",
+            body: "Create new note to make it unmissable",
+            createdDateTime: DateTime.now(),
+            editedDateTime: DateTime.now(),
+            isPinned: true,
+            isUnmissable: false),
+      );
+      firstTimeBox.put(
+        firstTimeBoxName,
+        false,
+      );
+    }
   }
 
   FocusNode focusNode = FocusNode();

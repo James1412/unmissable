@@ -23,6 +23,7 @@ Future<void> initApp() async {
   await Hive.openBox<NoteModel>(notesBoxName);
   await Hive.openBox<NoteModel>(deletedNotesBoxName);
   await Hive.openBox(notificationIntervalBoxName);
+  await Hive.openBox(firstTimeBoxName);
   await NotificationService().initNotification();
 }
 
