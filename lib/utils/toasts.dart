@@ -77,7 +77,7 @@ void pinToast(BuildContext context, NoteModel noteModel) {
       context: context);
 }
 
-void deleteToast(BuildContext context, NoteModel noteModel) {
+void deleteToast(BuildContext context) {
   showToast(
       message: "Deleted",
       icon: Transform.translate(
@@ -92,7 +92,7 @@ void deleteToast(BuildContext context, NoteModel noteModel) {
       context: context);
 }
 
-void recoverToast(BuildContext context, NoteModel noteModel) {
+void recoverToast(BuildContext context) {
   showToast(
       message: "Recovered",
       icon: Transform.translate(

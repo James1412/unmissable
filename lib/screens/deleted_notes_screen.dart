@@ -66,6 +66,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
     return Scaffold(
       backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
       appBar: AppBar(
+        automaticallyImplyLeading: true,
         backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         surfaceTintColor: isDarkMode(context) ? darkModeBlack : Colors.white,

@@ -21,7 +21,7 @@ class NotesViewModel extends ChangeNotifier {
   NotesViewModel({required this.context});
 
   Future<void> deleteNote(NoteModel noteModel, BuildContext context) async {
-    deleteToast(context, noteModel);
+    deleteToast(context);
     notes
         .removeWhere((NoteModel note) => note.uniqueKey == noteModel.uniqueKey);
     sortHelper(context);

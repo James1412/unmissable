@@ -124,8 +124,14 @@ void onMoreTap({required BuildContext context}) {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignupLoginScreen(),
+                    PageRouteBuilder(
+                      transitionDuration: const Duration(milliseconds: 300),
+                      pageBuilder: (context, animation, secondaryAnimation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: const SignupLoginScreen(),
+                        );
+                      },
                     ),
                   );
                 },
