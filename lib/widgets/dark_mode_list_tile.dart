@@ -7,6 +7,8 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 Widget darkModeListTile({required context, required double modalHeight}) {
   return CupertinoListTile(
+    backgroundColor:
+        isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
     leading: Icon(
       Icons.dark_mode,
       color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -24,13 +26,20 @@ Widget darkModeListTile({required context, required double modalHeight}) {
           return StatefulBuilder(builder: (context, setState) {
             ThemeMode darkMode =
                 Provider.of<DarkModeViewModel>(context, listen: false).darkMode;
-            return CupertinoModalPopupSheet(
+            return CustomCupertinoModalPopupSheet(
               height: modalHeight,
               child: CupertinoListSection.insetGrouped(
                 additionalDividerMargin: 0.0,
                 dividerMargin: 0.0,
+                separatorColor:
+                    isDarkMode(context) ? darkModeGrey : lightCupertino,
+                backgroundColor:
+                    isDarkMode(context) ? darkModeBlack : lightCupertino,
                 children: [
                   CupertinoListTile(
+                    backgroundColor: isDarkMode(context)
+                        ? cupertinoInsideListTile
+                        : Colors.white,
                     onTap: () {
                       context
                           .read<DarkModeViewModel>()
@@ -45,10 +54,18 @@ Widget darkModeListTile({required context, required double modalHeight}) {
                       ),
                     ),
                     trailing: darkMode == ThemeMode.light
-                        ? const Icon(CupertinoIcons.check_mark)
+                        ? Icon(
+                            CupertinoIcons.check_mark,
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : darkModeBlack,
+                          )
                         : null,
                   ),
                   CupertinoListTile(
+                    backgroundColor: isDarkMode(context)
+                        ? cupertinoInsideListTile
+                        : Colors.white,
                     onTap: () {
                       context
                           .read<DarkModeViewModel>()
@@ -63,25 +80,12 @@ Widget darkModeListTile({required context, required double modalHeight}) {
                       ),
                     ),
                     trailing: darkMode == ThemeMode.dark
-                        ? const Icon(CupertinoIcons.check_mark)
-                        : null,
-                  ),
-                  CupertinoListTile(
-                    onTap: () {
-                      context
-                          .read<DarkModeViewModel>()
-                          .setDarkMode(ThemeMode.system);
-                      setState(() {});
-                    },
-                    title: Text(
-                      "System Mode",
-                      style: TextStyle(
-                        color:
-                            isDarkMode(context) ? Colors.white : darkModeBlack,
-                      ),
-                    ),
-                    trailing: darkMode == ThemeMode.system
-                        ? const Icon(CupertinoIcons.check_mark)
+                        ? Icon(
+                            CupertinoIcons.check_mark,
+                            color: isDarkMode(context)
+                                ? Colors.white
+                                : darkModeBlack,
+                          )
                         : null,
                   ),
                 ],
@@ -91,6 +95,9 @@ Widget darkModeListTile({required context, required double modalHeight}) {
         },
       );
     },
-    trailing: const CupertinoListTileChevron(),
+    trailing: Icon(
+      Icons.chevron_right,
+      color: darkModeGrey,
+    ),
   );
 }

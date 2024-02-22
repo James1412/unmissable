@@ -9,6 +9,8 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 Widget fontSizeListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListTile(
+    backgroundColor:
+        isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
     leading: Icon(
       Icons.text_increase,
       color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -19,13 +21,21 @@ Widget fontSizeListTile(
         color: isDarkMode(context) ? Colors.white : darkModeBlack,
       ),
     ),
-    trailing: const CupertinoListTileChevron(),
+    trailing: Icon(
+      Icons.chevron_right,
+      color: darkModeGrey,
+    ),
     onTap: () {
       showCupertinoModalPopup(
         context: context,
-        builder: (context) => CupertinoModalPopupSheet(
+        builder: (context) => CustomCupertinoModalPopupSheet(
           height: modalHeight,
           child: CupertinoListSection.insetGrouped(
+            additionalDividerMargin: 0.0,
+            dividerMargin: 0.0,
+            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
+            backgroundColor:
+                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "Range",
               style: TextStyle(
@@ -55,6 +65,9 @@ Widget fontSizeListTile(
             ),
             children: [
               CupertinoListTile(
+                backgroundColor: isDarkMode(context)
+                    ? cupertinoInsideListTile
+                    : Colors.white,
                 title: SizedBox(
                   width: double.maxFinite,
                   child: CupertinoSlider(

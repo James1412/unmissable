@@ -10,6 +10,8 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 Widget sortNotesListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListTile(
+    backgroundColor:
+        isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
     leading: Icon(
       Icons.sort,
       color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -20,20 +22,30 @@ Widget sortNotesListTile(
         color: isDarkMode(context) ? Colors.white : darkModeBlack,
       ),
     ),
-    trailing: const CupertinoListTileChevron(),
+    trailing: Icon(
+      Icons.chevron_right,
+      color: darkModeGrey,
+    ),
     onTap: () {
       showCupertinoModalPopup(
         context: context,
         builder: (context) => StatefulBuilder(builder: (context, setState) {
           SortNotes sortNotes =
               Provider.of<SortNotesViewModel>(context, listen: false).sortNotes;
-          return CupertinoModalPopupSheet(
+          return CustomCupertinoModalPopupSheet(
             height: modalHeight,
             child: CupertinoListSection.insetGrouped(
               additionalDividerMargin: 0.0,
               dividerMargin: 0.0,
+              separatorColor:
+                  isDarkMode(context) ? darkModeGrey : lightCupertino,
+              backgroundColor:
+                  isDarkMode(context) ? darkModeBlack : lightCupertino,
               children: [
                 CupertinoListTile(
+                  backgroundColor: isDarkMode(context)
+                      ? cupertinoInsideListTile
+                      : Colors.white,
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
@@ -47,10 +59,18 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.modifiedDateTime
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? Colors.white
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
                 CupertinoListTile(
+                  backgroundColor: isDarkMode(context)
+                      ? cupertinoInsideListTile
+                      : Colors.white,
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
@@ -64,10 +84,18 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.createdDateTime
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? Colors.white
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
                 CupertinoListTile(
+                  backgroundColor: isDarkMode(context)
+                      ? cupertinoInsideListTile
+                      : Colors.white,
                   onTap: () {
                     context
                         .read<SortNotesViewModel>()
@@ -81,7 +109,12 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.alphabetical
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? Colors.white
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
               ],

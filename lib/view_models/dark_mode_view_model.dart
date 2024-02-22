@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class DarkModeViewModel extends ChangeNotifier {
-  ThemeMode darkMode = ThemeMode.system;
+  ThemeMode darkMode = ThemeMode.dark;
 
   void setDarkMode(ThemeMode mode) {
     darkMode = mode;
@@ -11,9 +11,9 @@ class DarkModeViewModel extends ChangeNotifier {
 }
 
 bool isDarkMode(BuildContext context) {
-  if (context.watch<DarkModeViewModel>().darkMode == ThemeMode.system) {
-    return MediaQuery.of(context).platformBrightness == Brightness.dark;
-  } else {
-    return context.watch<DarkModeViewModel>().darkMode == ThemeMode.dark;
-  }
+  return context.watch<DarkModeViewModel>().darkMode == ThemeMode.dark;
+}
+
+bool isSystemDark(BuildContext context) {
+  return MediaQuery.of(context).platformBrightness == Brightness.dark;
 }

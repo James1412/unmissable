@@ -48,13 +48,17 @@ class _EditScreenState extends State<EditScreen> {
   void onInfoTap() {
     showCupertinoModalPopup(
       context: context,
-      builder: (context) => CupertinoModalPopupSheet(
+      builder: (context) => CustomCupertinoModalPopupSheet(
         height: MediaQuery.of(context).size.height * 0.35,
         child: CupertinoListSection.insetGrouped(
+          backgroundColor: isDarkMode(context) ? darkModeBlack : lightCupertino,
+          separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
           additionalDividerMargin: 0.0,
           dividerMargin: 0.0,
           children: [
             CupertinoListTile(
+              backgroundColor:
+                  isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
               title: Text(
                 "Created",
                 style: TextStyle(
@@ -73,6 +77,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
             ),
             CupertinoListTile(
+              backgroundColor:
+                  isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
               title: Text(
                 "Modified",
                 style: TextStyle(
@@ -91,6 +97,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
             ),
             CupertinoListTile(
+              backgroundColor:
+                  isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
               title: Text(
                 "Characters",
                 style: TextStyle(
@@ -108,6 +116,8 @@ class _EditScreenState extends State<EditScreen> {
               ),
             ),
             CupertinoListTile(
+              backgroundColor:
+                  isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
               title: Text(
                 "Words",
                 style: TextStyle(

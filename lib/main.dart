@@ -48,11 +48,6 @@ class UnmissableApp extends StatefulWidget {
 
 class _UnmissableAppState extends State<UnmissableApp> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     ThemeMode themeMode = context.watch<DarkModeViewModel>().darkMode;
     return MaterialApp(

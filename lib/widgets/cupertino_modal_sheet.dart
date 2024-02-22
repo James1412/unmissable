@@ -6,18 +6,19 @@ import 'package:flutter/services.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 
-class CupertinoModalPopupSheet extends StatefulWidget {
+class CustomCupertinoModalPopupSheet extends StatefulWidget {
   final Widget child;
   final double height;
-  const CupertinoModalPopupSheet(
+  const CustomCupertinoModalPopupSheet(
       {super.key, required this.child, required this.height});
 
   @override
-  State<CupertinoModalPopupSheet> createState() =>
-      _CupertinoModalPopupSheetState();
+  State<CustomCupertinoModalPopupSheet> createState() =>
+      _CustomCupertinoModalPopupSheetState();
 }
 
-class _CupertinoModalPopupSheetState extends State<CupertinoModalPopupSheet> {
+class _CustomCupertinoModalPopupSheetState
+    extends State<CustomCupertinoModalPopupSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(

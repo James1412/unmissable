@@ -64,7 +64,7 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                   color: isDarkMode(context) ? Colors.white : darkModeBlack),
               itemColor: isDarkMode(context)
                   ? Colors.white
-                  : CupertinoColors.secondaryLabel,
+                  : CupertinoColors.systemGrey,
               placeholderStyle: isDarkMode(context)
                   ? const TextStyle(color: Colors.white)
                   : null,
