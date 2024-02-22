@@ -6,11 +6,7 @@ import 'package:unmissable/view_models/notes_view_model.dart';
 
 class SortNotesViewModel extends ChangeNotifier {
   final db = SortNotesRepository();
-  late SortNotes sortNotes = db.getSort() == SortNotes.alphabetical.toString()
-      ? SortNotes.alphabetical
-      : db.getSort() == SortNotes.createdDateTime.toString()
-          ? SortNotes.createdDateTime
-          : SortNotes.modifiedDateTime;
+  late SortNotes sortNotes = db.getSort();
 
   void setSorting(SortNotes sort, BuildContext context) {
     sortNotes = sort;

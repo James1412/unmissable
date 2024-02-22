@@ -6,11 +6,10 @@ final sortNotesBox = Hive.box(sortNotesBoxName);
 
 class SortNotesRepository {
   Future<void> setSorting(SortNotes sort) async {
-    await sortNotesBox.put(sortNotesBoxName, sort.toString());
+    await sortNotesBox.put(sortNotesBoxName, sort);
   }
 
-  String getSort() {
-    return sortNotesBox.get(sortNotesBoxName) ??
-        SortNotes.modifiedDateTime.toString();
+  SortNotes getSort() {
+    return sortNotesBox.get(sortNotesBoxName) ?? SortNotes.modifiedDateTime;
   }
 }

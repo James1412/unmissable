@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
+import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/deleted_notes_vm.dart';
@@ -15,6 +16,7 @@ import 'package:unmissable/view_models/sort_notes_view_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  Hive.registerAdapter(SortNotesAdapter());
   await Hive.openBox(fontSizeBoxName);
   await Hive.openBox(sortNotesBoxName);
   await Hive.openBox(notesBoxName);
