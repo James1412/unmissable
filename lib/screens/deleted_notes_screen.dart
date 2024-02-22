@@ -76,7 +76,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                   }
                   context
                       .read<DeletedNotesViewModel>()
-                      .deleteNote(notes[index]);
+                      .deleteNote(notes[index], context);
                 },
                 backgroundColor: Colors.red,
                 icon: FontAwesomeIcons.trash,

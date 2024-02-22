@@ -11,14 +11,14 @@ class DeletedNotesViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteNote(NoteModel note) {
+  void deleteNote(NoteModel note, BuildContext context) {
     deletedNotes.removeWhere(
         (NoteModel noteModel) => noteModel.uniqueKey == note.uniqueKey);
     notifyListeners();
   }
 
   void recoverNote(NoteModel note, BuildContext context) {
-    deleteNote(note);
+    deleteNote(note, context);
     context.read<NotesViewModel>().addNote(note, context);
     notifyListeners();
   }

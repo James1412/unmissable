@@ -47,7 +47,12 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.modifiedDateTime
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? darkModeGrey
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
                 CupertinoListTile(
@@ -64,7 +69,12 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.createdDateTime
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? darkModeGrey
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
                 CupertinoListTile(
@@ -81,7 +91,12 @@ Widget sortNotesListTile(
                     ),
                   ),
                   trailing: sortNotes == SortNotes.alphabetical
-                      ? const Icon(CupertinoIcons.check_mark)
+                      ? Icon(
+                          CupertinoIcons.check_mark,
+                          color: isDarkMode(context)
+                              ? darkModeGrey
+                              : darkModeBlack,
+                        )
                       : null,
                 ),
               ],

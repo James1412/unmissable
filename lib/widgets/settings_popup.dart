@@ -25,6 +25,32 @@ void onMoreTap({required BuildContext context}) {
         children: [
           CupertinoListSection.insetGrouped(
             header: Text(
+              "ADS",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
+              ),
+            ),
+            children: [
+              CupertinoListTile(
+                leading: Icon(
+                  Icons.ad_units_rounded,
+                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                ),
+                title: Text(
+                  "Remove ads",
+                  style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                ),
+                trailing: const CupertinoListTileChevron(),
+                onTap: () {},
+              ),
+            ],
+          ),
+          CupertinoListSection.insetGrouped(
+            header: Text(
               "WIDGET",
               style: TextStyle(
                 fontSize: 14,
@@ -95,6 +121,7 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
+                onTap: () {},
                 trailing: const CupertinoListTileChevron(),
               ),
             ],
@@ -117,15 +144,18 @@ void onMoreTap({required BuildContext context}) {
                 ),
                 trailing: const CupertinoListTileChevron(),
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => const DeletedNotesScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const DeletedNotesScreen()),
+                  );
                 },
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
             header: Text(
-              "FEEDBACK",
+              "OTHERS",
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.normal,
@@ -134,31 +164,6 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               feedbackListTile(context: context),
-              CupertinoListTile(
-                leading: Icon(
-                  Icons.contact_mail,
-                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
-                ),
-                title: Text(
-                  "Developer's contact",
-                  style: TextStyle(
-                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
-                  ),
-                ),
-                trailing: const CupertinoListTileChevron(),
-              ),
-            ],
-          ),
-          CupertinoListSection.insetGrouped(
-            header: Text(
-              "ABOUT",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
-              ),
-            ),
-            children: [
               CupertinoListTile(
                 leading: Icon(
                   Icons.info,

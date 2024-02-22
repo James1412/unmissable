@@ -31,24 +31,21 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     return Container(
       color: isDarkMode(context) ? darkModeBlack : null,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 10.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Notes",
-                    style: TextStyle(fontSize: 27, fontWeight: FontWeight.bold),
-                  ),
-                  GestureDetector(
-                    onTap: () => onMoreTap(context: context),
-                    child: const Icon(FontAwesomeIcons.ellipsis),
-                  ),
-                ],
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Notes",
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                GestureDetector(
+                  onTap: () => onMoreTap(context: context),
+                  child: const Icon(FontAwesomeIcons.ellipsis),
+                ),
+              ],
             ),
             const SizedBox(
               height: 10,

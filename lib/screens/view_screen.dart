@@ -162,7 +162,7 @@ class _ViewScreenState extends State<ViewScreen> {
                 ),
               ),
               PullDownButton(
-                itemBuilder: (context) => [
+                itemBuilder: (_) => [
                   PullDownMenuItem(
                     title: 'Recover',
                     icon: Icons.restore,
@@ -185,11 +185,11 @@ class _ViewScreenState extends State<ViewScreen> {
                       }
                       context
                           .read<DeletedNotesViewModel>()
-                          .deleteNote(widget.note);
+                          .deleteNote(widget.note, context);
                     },
                   ),
                 ],
-                buttonBuilder: (context, showMenu) => CupertinoButton(
+                buttonBuilder: (_, showMenu) => CupertinoButton(
                   onPressed: showMenu,
                   padding: const EdgeInsets.all(15),
                   child: Icon(

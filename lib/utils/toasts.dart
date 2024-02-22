@@ -91,3 +91,18 @@ void deleteToast(BuildContext context, NoteModel noteModel) {
       color: Colors.red.shade600,
       context: context);
 }
+
+void recoverToast(BuildContext context, NoteModel noteModel) {
+  showToast(
+      message: "Recovered",
+      icon: Transform.translate(
+        offset: const Offset(0, 2.5),
+        child: const Icon(
+          Icons.restore,
+          size: 15,
+          color: Colors.white,
+        ),
+      ),
+      color: Colors.greenAccent,
+      context: context);
+}

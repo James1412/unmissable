@@ -63,7 +63,12 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.everyMinute
-                            ? const Icon(CupertinoIcons.check_mark)
+                            ? Icon(
+                                CupertinoIcons.check_mark,
+                                color: isDarkMode(context)
+                                    ? darkModeGrey
+                                    : darkModeBlack,
+                              )
                             : null,
                       ),
                       CupertinoListTile(
@@ -82,7 +87,12 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.hourly
-                            ? const Icon(CupertinoIcons.check_mark)
+                            ? Icon(
+                                CupertinoIcons.check_mark,
+                                color: isDarkMode(context)
+                                    ? darkModeGrey
+                                    : darkModeBlack,
+                              )
                             : null,
                       ),
                       CupertinoListTile(
@@ -101,7 +111,12 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.daily
-                            ? const Icon(CupertinoIcons.check_mark)
+                            ? Icon(
+                                CupertinoIcons.check_mark,
+                                color: isDarkMode(context)
+                                    ? darkModeGrey
+                                    : darkModeBlack,
+                              )
                             : null,
                       ),
                     ],

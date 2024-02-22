@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
+import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
@@ -14,6 +15,10 @@ import 'package:unmissable/view_models/sort_notes_view_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await Hive.openBox(fontSizeBoxName);
+  await Hive.openBox(sortNotesBoxName);
+  await Hive.openBox(notesBoxName);
+  await Hive.openBox(deletedNotesBoxName);
   await NotificationService().initNotification();
   runApp(
     MultiProvider(
@@ -39,18 +44,8 @@ void main() async {
   );
 }
 
-class UnmissableApp extends StatefulWidget {
+class UnmissableApp extends StatelessWidget {
   const UnmissableApp({super.key});
-
-  @override
-  State<UnmissableApp> createState() => _UnmissableAppState();
-}
-
-class _UnmissableAppState extends State<UnmissableApp> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

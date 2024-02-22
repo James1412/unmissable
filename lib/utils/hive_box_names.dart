@@ -1,1 +1,4 @@
-String darkModeBox = "dark_mode_box";
+String fontSizeBoxName = "fontsizeboxname";
+String sortNotesBoxName = "sortnotesboxname";
+String notesBoxName = "notesboxname";
+String deletedNotesBoxName = "deletednotesboxname";
