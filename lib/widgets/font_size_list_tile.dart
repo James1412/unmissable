@@ -2,15 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 Widget fontSizeListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListTile(
-    backgroundColor:
-        isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
     leading: Icon(
       Icons.text_increase,
       color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -21,21 +19,13 @@ Widget fontSizeListTile(
         color: isDarkMode(context) ? Colors.white : darkModeBlack,
       ),
     ),
-    trailing: Icon(
-      Icons.chevron_right,
-      color: darkModeGrey,
-    ),
+    trailing: const CupertinoListTileChevron(),
     onTap: () {
       showCupertinoModalPopup(
         context: context,
-        builder: (context) => CustomCupertinoModalPopupSheet(
+        builder: (context) => CupertinoModalPopupSheet(
           height: modalHeight,
           child: CupertinoListSection.insetGrouped(
-            additionalDividerMargin: 0.0,
-            dividerMargin: 0.0,
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "Range",
               style: TextStyle(
@@ -65,9 +55,6 @@ Widget fontSizeListTile(
             ),
             children: [
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 title: SizedBox(
                   width: double.maxFinite,
                   child: CupertinoSlider(

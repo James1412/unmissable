@@ -7,7 +7,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unmissable/screens/home_screen.dart';
 import 'package:unmissable/screens/write_screen.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 
 class NavigationScreen extends StatefulWidget {
   const NavigationScreen({super.key});

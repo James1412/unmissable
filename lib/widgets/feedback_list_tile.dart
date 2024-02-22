@@ -8,8 +8,6 @@ import 'package:url_launcher/url_launcher.dart';
 
 Widget feedbackListTile({required BuildContext context}) {
   return CupertinoListTile(
-    backgroundColor:
-        isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
     leading: Icon(
       Icons.feedback,
       color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -18,10 +16,7 @@ Widget feedbackListTile({required BuildContext context}) {
         style: TextStyle(
           color: isDarkMode(context) ? Colors.white : darkModeBlack,
         )),
-    trailing: Icon(
-      Icons.chevron_right,
-      color: darkModeGrey,
-    ),
+    trailing: const CupertinoListTileChevron(),
     onTap: () {
       Navigator.pop(context);
       BetterFeedback.of(context).show(

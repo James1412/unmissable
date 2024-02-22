@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
@@ -11,10 +11,6 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 Widget notificationRepeatIntervalListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListSection.insetGrouped(
-    additionalDividerMargin: 0.0,
-    dividerMargin: 0.0,
-    separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-    backgroundColor: isDarkMode(context) ? darkModeBlack : lightCupertino,
     header: Text(
       "NOTIFICATION",
       style: TextStyle(
@@ -25,8 +21,6 @@ Widget notificationRepeatIntervalListTile(
     ),
     children: [
       CupertinoListTile(
-        backgroundColor:
-            isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
         leading: Icon(
           CupertinoIcons.bell_fill,
           color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -37,10 +31,7 @@ Widget notificationRepeatIntervalListTile(
             color: isDarkMode(context) ? Colors.white : darkModeBlack,
           ),
         ),
-        trailing: Icon(
-          Icons.chevron_right,
-          color: darkModeGrey,
-        ),
+        trailing: const CupertinoListTileChevron(),
         onTap: () {
           showCupertinoModalPopup(
             context: context,
@@ -50,20 +41,13 @@ Widget notificationRepeatIntervalListTile(
                     Provider.of<NotificationIntervalViewModel>(context,
                             listen: false)
                         .interval;
-                return CustomCupertinoModalPopupSheet(
+                return CupertinoModalPopupSheet(
                   height: modalHeight,
                   child: CupertinoListSection.insetGrouped(
                     additionalDividerMargin: 0.0,
                     dividerMargin: 0.0,
-                    separatorColor:
-                        isDarkMode(context) ? darkModeGrey : lightCupertino,
-                    backgroundColor:
-                        isDarkMode(context) ? darkModeBlack : lightCupertino,
                     children: [
                       CupertinoListTile(
-                        backgroundColor: isDarkMode(context)
-                            ? cupertinoInsideListTile
-                            : Colors.white,
                         onTap: () {
                           context
                               .read<NotificationIntervalViewModel>()
@@ -79,16 +63,10 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.everyMinute
-                            ? Icon(CupertinoIcons.check_mark,
-                                color: isDarkMode(context)
-                                    ? Colors.white
-                                    : darkModeBlack)
+                            ? const Icon(CupertinoIcons.check_mark)
                             : null,
                       ),
                       CupertinoListTile(
-                        backgroundColor: isDarkMode(context)
-                            ? cupertinoInsideListTile
-                            : Colors.white,
                         onTap: () {
                           context
                               .read<NotificationIntervalViewModel>()
@@ -104,16 +82,10 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.hourly
-                            ? Icon(CupertinoIcons.check_mark,
-                                color: isDarkMode(context)
-                                    ? Colors.white
-                                    : darkModeBlack)
+                            ? const Icon(CupertinoIcons.check_mark)
                             : null,
                       ),
                       CupertinoListTile(
-                        backgroundColor: isDarkMode(context)
-                            ? cupertinoInsideListTile
-                            : Colors.white,
                         onTap: () {
                           context
                               .read<NotificationIntervalViewModel>()
@@ -129,10 +101,7 @@ Widget notificationRepeatIntervalListTile(
                           ),
                         ),
                         trailing: interval == RepeatInterval.daily
-                            ? Icon(CupertinoIcons.check_mark,
-                                color: isDarkMode(context)
-                                    ? Colors.white
-                                    : darkModeBlack)
+                            ? const Icon(CupertinoIcons.check_mark)
                             : null,
                       ),
                     ],
@@ -144,8 +113,6 @@ Widget notificationRepeatIntervalListTile(
         },
       ),
       CupertinoListTile(
-        backgroundColor:
-            isDarkMode(context) ? cupertinoInsideListTile : Colors.white,
         leading: Icon(
           CupertinoIcons.bell_slash_fill,
           color: isDarkMode(context) ? Colors.white : darkModeBlack,

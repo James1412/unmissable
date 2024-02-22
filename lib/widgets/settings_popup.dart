@@ -6,7 +6,6 @@ import 'package:unmissable/screens/deleted_notes_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
-import 'package:unmissable/widgets/dark_mode_list_tile.dart';
 import 'package:unmissable/widgets/feedback_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';
 import 'package:unmissable/widgets/notification_repeat_interval_list_tile.dart';
@@ -20,16 +19,11 @@ void onMoreTap({required BuildContext context}) {
   }
   showCupertinoModalPopup(
     context: context,
-    builder: (context) => CustomCupertinoModalPopupSheet(
+    builder: (context) => CupertinoModalPopupSheet(
       height: modalHeight,
       child: Column(
         children: [
           CupertinoListSection.insetGrouped(
-            additionalDividerMargin: 0.0,
-            dividerMargin: 0.0,
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "WIDGET",
               style: TextStyle(
@@ -40,9 +34,6 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 leading: Icon(
                   Icons.widgets,
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -53,10 +44,7 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: darkModeGrey,
-                ),
+                trailing: const CupertinoListTileChevron(),
                 onTap: () async {
                   if (Platform.isAndroid) {
                     await launchUrl(Uri.parse(
@@ -71,11 +59,6 @@ void onMoreTap({required BuildContext context}) {
             ],
           ),
           CupertinoListSection.insetGrouped(
-            additionalDividerMargin: 0.0,
-            dividerMargin: 0.0,
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "STYLE",
               style: TextStyle(
@@ -85,7 +68,6 @@ void onMoreTap({required BuildContext context}) {
               ),
             ),
             children: [
-              darkModeListTile(context: context, modalHeight: modalHeight),
               fontSizeListTile(context: context, modalHeight: modalHeight),
               sortNotesListTile(context: context, modalHeight: modalHeight),
             ],
@@ -93,9 +75,6 @@ void onMoreTap({required BuildContext context}) {
           notificationRepeatIntervalListTile(
               context: context, modalHeight: modalHeight),
           CupertinoListSection.insetGrouped(
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "ACCOUNT",
               style: TextStyle(
@@ -106,9 +85,6 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 leading: Icon(
                   Icons.person,
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -119,17 +95,11 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: darkModeGrey,
-                ),
+                trailing: const CupertinoListTileChevron(),
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "TRASH",
               style: TextStyle(
@@ -140,18 +110,12 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 leading: const Icon(Icons.delete, color: Colors.red),
                 title: const Text(
                   "Deleted notes",
                   style: TextStyle(color: Colors.red),
                 ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: darkModeGrey,
-                ),
+                trailing: const CupertinoListTileChevron(),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => const DeletedNotesScreen()));
@@ -160,11 +124,6 @@ void onMoreTap({required BuildContext context}) {
             ],
           ),
           CupertinoListSection.insetGrouped(
-            additionalDividerMargin: 0.0,
-            dividerMargin: 0.0,
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "FEEDBACK",
               style: TextStyle(
@@ -176,9 +135,6 @@ void onMoreTap({required BuildContext context}) {
             children: [
               feedbackListTile(context: context),
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 leading: Icon(
                   Icons.contact_mail,
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -189,17 +145,11 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: darkModeGrey,
-                ),
+                trailing: const CupertinoListTileChevron(),
               ),
             ],
           ),
           CupertinoListSection.insetGrouped(
-            separatorColor: isDarkMode(context) ? darkModeGrey : lightCupertino,
-            backgroundColor:
-                isDarkMode(context) ? darkModeBlack : lightCupertino,
             header: Text(
               "ABOUT",
               style: TextStyle(
@@ -210,9 +160,6 @@ void onMoreTap({required BuildContext context}) {
             ),
             children: [
               CupertinoListTile(
-                backgroundColor: isDarkMode(context)
-                    ? cupertinoInsideListTile
-                    : Colors.white,
                 leading: Icon(
                   Icons.info,
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
@@ -223,10 +170,7 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                trailing: Icon(
-                  Icons.chevron_right,
-                  color: darkModeGrey,
-                ),
+                trailing: const CupertinoListTileChevron(),
                 onTap: () {
                   showAboutDialog(
                     context: context,

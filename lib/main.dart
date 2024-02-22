@@ -5,7 +5,6 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
@@ -20,9 +19,6 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => NotesViewModel(),
-        ),
-        ChangeNotifierProvider(
-          create: (context) => DarkModeViewModel(),
         ),
         ChangeNotifierProvider(
           create: (context) => FontSizeViewModel(),
@@ -48,13 +44,17 @@ class UnmissableApp extends StatefulWidget {
 
 class _UnmissableAppState extends State<UnmissableApp> {
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    ThemeMode themeMode = context.watch<DarkModeViewModel>().darkMode;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightTheme(),
       darkTheme: darkTheme(),
-      themeMode: themeMode,
+      themeMode: ThemeMode.system,
       home: const NavigationScreen(),
     );
   }
