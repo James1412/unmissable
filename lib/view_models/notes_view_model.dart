@@ -15,8 +15,10 @@ import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 class NotesViewModel extends ChangeNotifier {
   final db = NoteRepository();
+  BuildContext context;
+  late List<NoteModel> notes = db.getNotes(context);
 
-  late List<NoteModel> notes = db.getNotes();
+  NotesViewModel({required this.context});
 
   Future<void> deleteNote(NoteModel noteModel, BuildContext context) async {
     deleteToast(context, noteModel);
@@ -54,7 +56,6 @@ class NotesViewModel extends ChangeNotifier {
       NoteModel noteModel, BuildContext context) async {
     noteModel.isUnmissable = !noteModel.isUnmissable;
     unmissableToast(context, noteModel);
-    db.addOrUpdateNote(noteModel);
     sortHelper(context);
     if (noteModel.isUnmissable) {
       // When unmissable
@@ -64,6 +65,7 @@ class NotesViewModel extends ChangeNotifier {
       await NotificationService()
           .cancelScheduledNotification(noteModel.uniqueKey);
     }
+    db.addOrUpdateNote(noteModel);
     notifyListeners();
   }
 
@@ -105,6 +107,9 @@ class NotesViewModel extends ChangeNotifier {
   Future<void> notificationAllOff() async {
     await NotificationService().cancelAllNotification();
     notes = notes.map((NoteModel note) => note..isUnmissable = false).toList();
+    for (NoteModel note in notes) {
+      db.addOrUpdateNote(note);
+    }
     notifyListeners();
   }
 

@@ -29,6 +29,36 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
     super.dispose();
   }
 
+  Future<void> onDeleteNote(NoteModel note) async {
+    if (Platform.isIOS) {
+      HapticFeedback.lightImpact();
+    }
+    await showCupertinoDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: const Text("Delete the note?"),
+        content: const Text("This will permanently delete the note"),
+        actions: [
+          CupertinoDialogAction(
+            isDefaultAction: true,
+            child: const Text("No"),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          CupertinoDialogAction(
+            isDestructiveAction: true,
+            child: const Text("Yes"),
+            onPressed: () {
+              context.read<DeletedNotesViewModel>().deleteNote(note, context);
+              Navigator.pop(context);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
@@ -43,7 +73,30 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
         actions: [
           GestureDetector(
             onTap: () {
-              context.read<DeletedNotesViewModel>().deleteAllNotes();
+              showCupertinoDialog(
+                context: context,
+                builder: (context) => CupertinoAlertDialog(
+                  title: const Text("Delete all notes?"),
+                  content: const Text("This will permanently delete the notes"),
+                  actions: [
+                    CupertinoDialogAction(
+                      isDefaultAction: true,
+                      child: const Text("No"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    ),
+                    CupertinoDialogAction(
+                      isDestructiveAction: true,
+                      child: const Text("Yes"),
+                      onPressed: () {
+                        context.read<DeletedNotesViewModel>().deleteAllNotes();
+                        Navigator.pop(context);
+                      },
+                    ),
+                  ],
+                ),
+              );
             },
             child: const Padding(
               padding: EdgeInsets.all(15.0),
@@ -83,14 +136,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                 icon: Icons.restore,
               ),
               SlidableAction(
-                onPressed: (context) {
-                  if (Platform.isIOS) {
-                    HapticFeedback.lightImpact();
-                  }
-                  context
-                      .read<DeletedNotesViewModel>()
-                      .deleteNote(notes[index], context);
-                },
+                onPressed: (context) => onDeleteNote(notes[index]),
                 backgroundColor: Colors.red,
                 icon: FontAwesomeIcons.trash,
               ),
@@ -106,6 +152,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                 MaterialPageRoute(
                   builder: (context) => ViewScreen(
                     note: notes[index],
+                    onDeleteNote: onDeleteNote,
                   ),
                 ),
               );

@@ -34,9 +34,6 @@ void main() async {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => NotesViewModel(),
-        ),
-        ChangeNotifierProvider(
           create: (context) => FontSizeViewModel(),
         ),
         ChangeNotifierProvider(
@@ -47,6 +44,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => DeletedNotesViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => NotesViewModel(context: context),
         ),
       ],
       child: const BetterFeedback(child: UnmissableApp()),

@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unmissable/screens/deleted_notes_screen.dart';
+import 'package:unmissable/screens/signup_login_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/feedback_list_tile.dart';
@@ -120,7 +121,14 @@ void onMoreTap({required BuildContext context}) {
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SignupLoginScreen(),
+                    ),
+                  );
+                },
                 trailing: const CupertinoListTileChevron(),
               ),
             ],

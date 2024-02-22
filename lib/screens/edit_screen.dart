@@ -26,6 +26,7 @@ class _EditScreenState extends State<EditScreen> {
       TextEditingController(text: widget.note.title);
   late final TextEditingController _textEditingController =
       TextEditingController(text: widget.note.body);
+  bool isUpdateNote = false;
 
   @override
   void dispose() {
@@ -35,13 +36,15 @@ class _EditScreenState extends State<EditScreen> {
   }
 
   void onPop() {
-    context.read<NotesViewModel>().updateNote(
-          widget.note
-            ..title = _titleController.text
-            ..body = _textEditingController.text
-            ..editedDateTime = DateTime.now(),
-          context,
-        );
+    if (isUpdateNote == true) {
+      context.read<NotesViewModel>().updateNote(
+            widget.note
+              ..title = _titleController.text
+              ..body = _textEditingController.text
+              ..editedDateTime = DateTime.now(),
+            context,
+          );
+    }
   }
 
   void onInfoTap() {
@@ -153,14 +156,8 @@ class _EditScreenState extends State<EditScreen> {
           }
         },
         child: Scaffold(
-          backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           appBar: AppBar(
             automaticallyImplyLeading: true,
-            shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
-            surfaceTintColor:
-                isDarkMode(context) ? darkModeBlack : Colors.white,
-            backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
-            foregroundColor: isDarkMode(context) ? Colors.white : darkModeBlack,
             actions: [
               CupertinoButton(
                 onPressed: onInfoTap,
@@ -184,7 +181,7 @@ class _EditScreenState extends State<EditScreen> {
                             widget.note
                               ..title = _titleController.text
                               ..body = _textEditingController.text
-                              ..editedDateTime = DateTime.now(),
+                              ..editedDateTime = widget.note.editedDateTime,
                             context,
                           );
                       context
@@ -205,7 +202,7 @@ class _EditScreenState extends State<EditScreen> {
                             widget.note
                               ..title = _titleController.text
                               ..body = _textEditingController.text
-                              ..editedDateTime = DateTime.now(),
+                              ..editedDateTime = widget.note.editedDateTime,
                             context,
                           );
                       context
@@ -239,6 +236,7 @@ class _EditScreenState extends State<EditScreen> {
                   focusNode: titleNode,
                   cursorColor: Colors.blue,
                   controller: _titleController,
+                  onChanged: (value) => isUpdateNote = true,
                   onSubmitted: (val) {
                     FocusScope.of(context).requestFocus(bodyNode);
                   },
@@ -257,6 +255,7 @@ class _EditScreenState extends State<EditScreen> {
                     cursorColor: Colors.blue,
                     controller: _textEditingController,
                     keyboardType: TextInputType.multiline,
+                    onChanged: (value) => isUpdateNote = true,
                     autofocus: true,
                     maxLines: null,
                     minLines: 7,

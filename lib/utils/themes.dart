@@ -9,6 +9,13 @@ ThemeData lightTheme() {
       surfaceTintColor: Colors.white,
       shadowColor: Colors.white,
     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: Colors.white,
+      shadowColor: Colors.white,
+      surfaceTintColor: Colors.white,
+      foregroundColor: darkModeBlack,
+    ),
+    scaffoldBackgroundColor: Colors.white,
   );
 }
 
@@ -21,6 +28,13 @@ ThemeData darkTheme() {
       surfaceTintColor: Colors.black,
       shadowColor: Colors.black,
     ),
+    appBarTheme: AppBarTheme(
+      backgroundColor: darkModeBlack,
+      shadowColor: darkModeBlack,
+      surfaceTintColor: darkModeBlack,
+      foregroundColor: Colors.white,
+    ),
+    scaffoldBackgroundColor: darkModeBlack,
   );
 }
 

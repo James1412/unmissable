@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
-import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 
@@ -56,11 +55,7 @@ class _WriteScreenState extends State<WriteScreen> {
         }
       },
       child: Scaffold(
-        backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         appBar: AppBar(
-          shadowColor: isDarkMode(context) ? darkModeBlack : Colors.white,
-          surfaceTintColor: isDarkMode(context) ? darkModeBlack : Colors.white,
-          backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
           title: TextField(
             onSubmitted: (val) {
               FocusScope.of(context).requestFocus(bodyNode);

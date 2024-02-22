@@ -8,6 +8,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/repos/notes_repository.dart';
 import 'package:unmissable/screens/edit_screen.dart';
 import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
@@ -53,8 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     if (firstTimeBox.get(firstTimeBoxName) == null) {
       final key = UniqueKey().hashCode;
-      Hive.box(notesBoxName).put(
-        key,
+      NoteRepository().addOrUpdateNote(
         NoteModel(
             uniqueKey: key,
             title: "Welcome",
@@ -92,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
         body: ListView(
           physics: const NeverScrollableScrollPhysics(),
           children: [
