@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -151,10 +152,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SlidableAction(
                           onPressed: (context) {
-                            deleteSearchResult(notes[index]);
+                            NoteModel note = notes[index];
                             context
                                 .read<NotesViewModel>()
-                                .deleteNote(notes[index], context);
+                                .deleteNote(note, context);
+                            deleteSearchResult(note);
                           },
                           backgroundColor: Colors.red,
                           icon: FontAwesomeIcons.trash,
