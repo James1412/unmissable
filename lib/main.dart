@@ -19,6 +19,7 @@ void main() async {
   await Hive.openBox(sortNotesBoxName);
   await Hive.openBox(notesBoxName);
   await Hive.openBox(deletedNotesBoxName);
+  await Hive.openBox(notificationIntervalBoxName);
   await NotificationService().initNotification();
   runApp(
     MultiProvider(
