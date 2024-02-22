@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/widgets/settings_popup.dart';
 
 class AppBarWidget extends StatefulWidget {

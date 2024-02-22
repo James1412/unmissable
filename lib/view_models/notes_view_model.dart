@@ -8,6 +8,7 @@ import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/utils/toasts.dart';
+import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
@@ -51,6 +52,7 @@ class NotesViewModel extends ChangeNotifier {
       await NotificationService()
           .cancelScheduledNotification(noteModel.uniqueKey);
     }
+    context.read<DeletedNotesViewModel>().addNote(noteModel);
     notifyListeners();
   }
 

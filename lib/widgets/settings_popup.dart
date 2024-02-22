@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unmissable/screens/deleted_notes_screen.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/feedback_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';

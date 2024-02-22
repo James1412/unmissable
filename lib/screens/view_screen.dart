@@ -8,7 +8,8 @@ import 'package:provider/provider.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
+import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
@@ -45,6 +46,9 @@ class _ViewScreenState extends State<ViewScreen> {
   }
 
   void onInfoTap() {
+    if (Platform.isIOS) {
+      HapticFeedback.lightImpact();
+    }
     showCupertinoModalPopup(
       context: context,
       builder: (context) => CupertinoModalPopupSheet(
@@ -166,13 +170,23 @@ class _ViewScreenState extends State<ViewScreen> {
                       if (Platform.isIOS) {
                         HapticFeedback.lightImpact();
                       }
+                      context
+                          .read<DeletedNotesViewModel>()
+                          .recoverNote(widget.note, context);
                     },
                   ),
                   PullDownMenuItem(
                     isDestructive: true,
                     title: 'Delete',
                     icon: CupertinoIcons.trash,
-                    onTap: () {},
+                    onTap: () {
+                      if (Platform.isIOS) {
+                        HapticFeedback.lightImpact();
+                      }
+                      context
+                          .read<DeletedNotesViewModel>()
+                          .deleteNote(widget.note);
+                    },
                   ),
                 ],
                 buttonBuilder: (context, showMenu) => CupertinoButton(

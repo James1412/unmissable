@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
@@ -7,8 +10,8 @@ import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/view_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/utils/is_dark_mode.dart';
+import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
-import 'package:unmissable/view_models/notes_view_model.dart';
 
 class DeletedNotesScreen extends StatefulWidget {
   const DeletedNotesScreen({super.key});
@@ -30,7 +33,7 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
   @override
   Widget build(BuildContext context) {
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
-    notes = context.watch<NotesViewModel>().notes;
+    notes = context.watch<DeletedNotesViewModel>().deletedNotes;
     return Scaffold(
       backgroundColor: isDarkMode(context) ? darkModeBlack : Colors.white,
       appBar: AppBar(
@@ -55,12 +58,26 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
             motion: const DrawerMotion(),
             children: [
               SlidableAction(
-                onPressed: (context) {},
+                onPressed: (context) {
+                  if (Platform.isIOS) {
+                    HapticFeedback.lightImpact();
+                  }
+                  context
+                      .read<DeletedNotesViewModel>()
+                      .recoverNote(notes[index], context);
+                },
                 backgroundColor: Colors.greenAccent,
                 icon: Icons.restore,
               ),
               SlidableAction(
-                onPressed: (context) {},
+                onPressed: (context) {
+                  if (Platform.isIOS) {
+                    HapticFeedback.lightImpact();
+                  }
+                  context
+                      .read<DeletedNotesViewModel>()
+                      .deleteNote(notes[index]);
+                },
                 backgroundColor: Colors.red,
                 icon: FontAwesomeIcons.trash,
               ),
@@ -68,6 +85,9 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
           ),
           child: InkWell(
             onTap: () {
+              if (Platform.isIOS) {
+                HapticFeedback.lightImpact();
+              }
               Navigator.push(
                 context,
                 MaterialPageRoute(

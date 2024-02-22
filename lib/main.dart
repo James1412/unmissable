@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
 import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/view_models/deleted_notes_vm.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
@@ -28,6 +29,9 @@ void main() async {
         ),
         ChangeNotifierProvider(
           create: (context) => NotificationIntervalViewModel(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => DeletedNotesViewModel(),
         ),
       ],
       child: const BetterFeedback(child: UnmissableApp()),

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:unmissable/utils/themes.dart';
-import 'package:unmissable/view_models/dark_mode_view_model.dart';
+import 'package:unmissable/utils/is_dark_mode.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Widget feedbackListTile({required BuildContext context}) {
