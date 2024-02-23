@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/themes.dart';
@@ -32,6 +35,9 @@ Widget notificationRepeatIntervalListTile(
         ),
         trailing: const CupertinoListTileChevron(),
         onTap: () {
+          if (Platform.isIOS) {
+            HapticFeedback.lightImpact();
+          }
           showCupertinoModalPopup(
             context: context,
             builder: (context) => StatefulBuilder(
@@ -132,6 +138,9 @@ Widget notificationRepeatIntervalListTile(
           color: isDarkMode(context) ? Colors.white : darkModeBlack,
         ),
         onTap: () {
+          if (Platform.isIOS) {
+            HapticFeedback.lightImpact();
+          }
           context.read<NotesViewModel>().notificationAllOff();
         },
         title: Text(

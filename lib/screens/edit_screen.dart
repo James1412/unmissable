@@ -14,8 +14,10 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 class EditScreen extends StatefulWidget {
   final NoteModel note;
-  final Function deleteSearch;
-  const EditScreen({super.key, required this.note, required this.deleteSearch});
+  const EditScreen({
+    super.key,
+    required this.note,
+  });
 
   @override
   State<EditScreen> createState() => _EditScreenState();
@@ -137,7 +139,6 @@ class _EditScreenState extends State<EditScreen> {
       HapticFeedback.lightImpact();
     }
     context.read<NotesViewModel>().deleteNote(widget.note, context);
-    widget.deleteSearch(widget.note);
     Navigator.pop(context);
   }
 
@@ -153,6 +154,13 @@ class _EditScreenState extends State<EditScreen> {
         onTap: () {
           if (FocusManager.instance.primaryFocus != null) {
             FocusManager.instance.primaryFocus!.unfocus();
+          }
+        },
+        onVerticalDragUpdate: (details) {
+          if (details.delta.dy >= 10) {
+            if (FocusManager.instance.primaryFocus != null) {
+              FocusManager.instance.primaryFocus!.unfocus();
+            }
           }
         },
         child: Scaffold(
@@ -258,7 +266,7 @@ class _EditScreenState extends State<EditScreen> {
                     onChanged: (value) => isUpdateNote = true,
                     autofocus: true,
                     maxLines: null,
-                    minLines: 7,
+                    minLines: 30,
                     style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.normal,

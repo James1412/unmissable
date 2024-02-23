@@ -8,7 +8,7 @@ import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 final noteBox = Hive.box<NoteModel>(notesBoxName);
 
-class NoteRepository {
+class HiveNoteRepository {
   Future<void> addOrUpdateNote(NoteModel note) async {
     await noteBox.put(note.uniqueKey, note);
   }
@@ -32,14 +32,21 @@ class NoteRepository {
     if (sorting == SortNotes.modifiedDateTime) {
       unPinnedNotes
           .sort((a, b) => b.editedDateTime.compareTo(a.editedDateTime));
+      pinnedNotes.sort((a, b) => b.editedDateTime.compareTo(a.editedDateTime));
+
       notes = pinnedNotes + unPinnedNotes;
     } else if (sorting == SortNotes.createdDateTime) {
       unPinnedNotes
+          .sort((a, b) => b.createdDateTime.compareTo(a.createdDateTime));
+      pinnedNotes
           .sort((a, b) => b.createdDateTime.compareTo(a.createdDateTime));
       notes = pinnedNotes + unPinnedNotes;
     } else if (sorting == SortNotes.alphabetical) {
       unPinnedNotes.sort(
           (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+      pinnedNotes.sort(
+          (a, b) => a.title.toLowerCase().compareTo(b.title.toLowerCase()));
+
       notes = pinnedNotes + unPinnedNotes;
     }
     return notes;

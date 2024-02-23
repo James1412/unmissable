@@ -3,8 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unmissable/screens/deleted_notes_screen.dart';
-import 'package:unmissable/screens/signup_login_screen.dart';
 import 'package:unmissable/utils/themes.dart';
+import 'package:unmissable/widgets/account_list_tile.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/feedback_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';
@@ -96,49 +96,34 @@ void onMoreTap({required BuildContext context}) {
             children: [
               fontSizeListTile(context: context, modalHeight: modalHeight),
               sortNotesListTile(context: context, modalHeight: modalHeight),
-            ],
-          ),
-          notificationRepeatIntervalListTile(
-              context: context, modalHeight: modalHeight),
-          CupertinoListSection.insetGrouped(
-            header: Text(
-              "ACCOUNT",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
-              ),
-            ),
-            children: [
               CupertinoListTile(
                 leading: Icon(
-                  Icons.person,
+                  Icons.dark_mode,
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
                 ),
                 title: Text(
-                  "Sign up & Log in",
+                  "How to use dark mode?",
                   style: TextStyle(
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    PageRouteBuilder(
-                      transitionDuration: const Duration(milliseconds: 300),
-                      pageBuilder: (context, animation, secondaryAnimation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: const SignupLoginScreen(),
-                        );
-                      },
-                    ),
-                  );
-                },
                 trailing: const CupertinoListTileChevron(),
+                onTap: () async {
+                  if (Platform.isAndroid) {
+                    await launchUrl(Uri.parse(
+                        "https://support.google.com/android/answer/9730472?hl=en"));
+                  }
+                  if (Platform.isIOS) {
+                    await launchUrl(
+                        Uri.parse("https://support.apple.com/en-ca/108350"));
+                  }
+                },
               ),
             ],
           ),
+          notificationRepeatIntervalListTile(
+              context: context, modalHeight: modalHeight),
+          accountListTile(context),
           CupertinoListSection.insetGrouped(
             header: Text(
               "TRASH",
@@ -157,6 +142,9 @@ void onMoreTap({required BuildContext context}) {
                 ),
                 trailing: const CupertinoListTileChevron(),
                 onTap: () {
+                  if (Platform.isIOS) {
+                    HapticFeedback.lightImpact();
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

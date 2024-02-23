@@ -31,6 +31,9 @@ class _WriteScreenState extends State<WriteScreen> {
   FocusNode bodyNode = FocusNode();
 
   void createNote({required bool isUnmissable, required BuildContext context}) {
+    if (Platform.isIOS) {
+      HapticFeedback.lightImpact();
+    }
     context.read<NotesViewModel>().addNote(
         NoteModel(
           uniqueKey: UniqueKey().hashCode,
@@ -52,6 +55,13 @@ class _WriteScreenState extends State<WriteScreen> {
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
           FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      onVerticalDragUpdate: (details) {
+        if (details.delta.dy >= 10) {
+          if (FocusManager.instance.primaryFocus != null) {
+            FocusManager.instance.primaryFocus!.unfocus();
+          }
         }
       },
       child: Scaffold(
@@ -97,7 +107,12 @@ class _WriteScreenState extends State<WriteScreen> {
                     ],
                     cancelButton: CupertinoActionSheetAction(
                       isDestructiveAction: true,
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () {
+                        if (Platform.isIOS) {
+                          HapticFeedback.lightImpact();
+                        }
+                        Navigator.pop(context);
+                      },
                       child: const Text(
                         "Cancel",
                       ),
@@ -127,7 +142,7 @@ class _WriteScreenState extends State<WriteScreen> {
             keyboardType: TextInputType.multiline,
             autofocus: true,
             maxLines: null,
-            minLines: 7,
+            minLines: 30,
             style: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.normal,

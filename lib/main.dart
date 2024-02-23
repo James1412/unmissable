@@ -1,7 +1,8 @@
-import 'package:feedback/feedback.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:unmissable/firebase_options.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
 import 'package:unmissable/services/notification_service.dart';
@@ -15,13 +16,15 @@ import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/view_models/sort_notes_view_model.dart';
 
 Future<void> initApp() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   await Hive.initFlutter();
   Hive.registerAdapter(SortNotesAdapter());
   Hive.registerAdapter(NoteModelAdapter());
   await Hive.openBox(fontSizeBoxName);
   await Hive.openBox(sortNotesBoxName);
-  await Hive.openBox<NoteModel>(notesBoxName);
   await Hive.openBox<NoteModel>(deletedNotesBoxName);
+  await Hive.openBox<NoteModel>(notesBoxName);
   await Hive.openBox(notificationIntervalBoxName);
   await Hive.openBox(firstTimeBoxName);
   await NotificationService().initNotification();
@@ -49,7 +52,7 @@ void main() async {
           create: (context) => NotesViewModel(context: context),
         ),
       ],
-      child: const BetterFeedback(child: UnmissableApp()),
+      child: const UnmissableApp(),
     ),
   );
 }

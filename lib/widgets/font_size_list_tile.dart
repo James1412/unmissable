@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
@@ -20,6 +23,9 @@ Widget fontSizeListTile(
     ),
     trailing: const CupertinoListTileChevron(),
     onTap: () {
+      if (Platform.isIOS) {
+        HapticFeedback.lightImpact();
+      }
       showCupertinoModalPopup(
         context: context,
         builder: (context) => CupertinoModalPopupSheet(

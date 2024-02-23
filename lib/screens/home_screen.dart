@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'dart:isolate';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
+import 'package:unmissable/repos/firebase_auth.dart';
 import 'package:unmissable/repos/notes_repository.dart';
 import 'package:unmissable/screens/edit_screen.dart';
 import 'package:unmissable/utils/hive_box_names.dart';
@@ -26,50 +26,18 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  final TextEditingController _textEditingController = TextEditingController();
-  late List<NoteModel> searchResults = [];
+  List<NoteModel> searchResults = [];
+
+  @override
+  void initState() {
+    super.initState();
+    FirebaseAuthentication().initAuth();
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void onQueryChanged() {
-    setState(() {
-      searchResults = Provider.of<NotesViewModel>(context, listen: false)
-          .notes
-          .where((element) => (element.title + element.body)
-              .toLowerCase()
-              .contains(_textEditingController.text))
-          .toList();
-    });
-  }
-
-  void deleteSearchResult(NoteModel note) {
-    searchResults.remove(note);
-  }
-
-  final firstTimeBox = Hive.box(firstTimeBoxName);
-  @override
-  void initState() {
-    super.initState();
-    if (firstTimeBox.get(firstTimeBoxName) == null) {
-      final key = UniqueKey().hashCode;
-      NoteRepository().addOrUpdateNote(
-        NoteModel(
-            uniqueKey: key,
-            title: "Welcome",
-            body: "Create new note to make it unmissable",
-            createdDateTime: DateTime.now(),
-            editedDateTime: DateTime.now(),
-            isPinned: true,
-            isUnmissable: false),
-      );
-      firstTimeBox.put(
-        firstTimeBoxName,
-        false,
-      );
-    }
   }
 
   FocusNode focusNode = FocusNode();
@@ -78,13 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
-    if (focusNode.hasPrimaryFocus) {
-      notes = searchResults;
-    }
-    if (_textEditingController.text.isEmpty ||
-        _textEditingController.text == "") {
-      notes = context.watch<NotesViewModel>().notes;
-    }
     return GestureDetector(
       onTap: () {
         if (FocusManager.instance.primaryFocus != null) {
@@ -99,143 +60,182 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            AppBarWidget(
-              focusNode: focusNode,
-              onQueryChanged: onQueryChanged,
-              textEditingController: _textEditingController,
-            ),
+            const AppBarWidget(),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: Scrollbar(
                 interactive: true,
                 controller: _scrollController,
-                child: ListView.separated(
-                  controller: _scrollController,
-                  itemCount: notes.length,
-                  separatorBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    child: Container(
-                      height: 1,
-                      color:
-                          isDarkMode(context) ? darkModeGrey : Colors.black12,
-                      width: double.maxFinite,
-                    ),
-                  ),
-                  itemBuilder: (context, index) => Slidable(
-                    endActionPane: ActionPane(
-                      motion: const DrawerMotion(),
-                      children: [
-                        SlidableAction(
-                          onPressed: (context) {
-                            if (Platform.isIOS) {
-                              HapticFeedback.lightImpact();
+                child: StreamBuilder(
+                    stream: FirebaseAuth.instance.authStateChanges(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        notes = HiveNoteRepository().getNotes(context);
+                      } else if (snapshot.hasData) {
+                        context
+                            .read<NotesViewModel>()
+                            .notificationOnHelper(context);
+                      }
+                      return StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection(notesBoxName)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            // If user exists and firebase data exists
+                            if (snapshot.hasData &&
+                                FirebaseAuth.instance.currentUser != null) {
+                              List<NoteModel> streamNotes = [];
+                              snapshot.data!.docs
+                                  .where((element) =>
+                                      element['uid'] ==
+                                      FirebaseAuth.instance.currentUser!.uid)
+                                  .forEach((element) {
+                                NoteModel note = NoteModel.fromJson(
+                                    element.data() as Map<String, dynamic>);
+                                streamNotes.add(note);
+                              });
+                              notes = sortNotes(context, streamNotes);
+                              context.watch<NotesViewModel>().notes = notes;
+                            } else {
+                              notes = HiveNoteRepository().getNotes(context);
+                              context.watch<NotesViewModel>().notes = notes;
                             }
-                            context
-                                .read<NotesViewModel>()
-                                .toggleUnmissable(notes[index], context);
-                          },
-                          backgroundColor: Colors.amber,
-                          icon: CupertinoIcons.bell_fill,
-                          foregroundColor: Colors.white,
-                        ),
-                        SlidableAction(
-                          onPressed: (context) {
-                            if (Platform.isIOS) {
-                              HapticFeedback.lightImpact();
-                            }
-                            context
-                                .read<NotesViewModel>()
-                                .togglePin(notes[index], context);
-                          },
-                          backgroundColor: Colors.blue,
-                          icon: FontAwesomeIcons.thumbtack,
-                        ),
-                        SlidableAction(
-                          onPressed: (context) {
-                            NoteModel note = notes[index];
-                            context
-                                .read<NotesViewModel>()
-                                .deleteNote(note, context);
-                            deleteSearchResult(note);
-                          },
-                          backgroundColor: Colors.red,
-                          icon: FontAwesomeIcons.trash,
-                        ),
-                      ],
-                    ),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => EditScreen(
-                              deleteSearch: deleteSearchResult,
-                              note: notes[index],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: CupertinoListTile(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 15,
-                            horizontal: 5,
-                          ),
-                          title: Text(
-                            notes[index].title,
-                            style: TextStyle(
-                              color: isDarkMode(context)
-                                  ? Colors.white
-                                  : darkModeBlack,
-                              fontSize: fontSize,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          additionalInfo:
-                              notes[index].isPinned && notes[index].isUnmissable
-                                  ? Row(
-                                      children: [
-                                        Icon(
-                                          Icons.notifications,
-                                          color: Colors.yellow.shade700,
-                                          size: 19,
+                            return ListView.separated(
+                              controller: _scrollController,
+                              itemCount: notes.length,
+                              separatorBuilder: (context, index) => Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Container(
+                                  height: 1,
+                                  color: isDarkMode(context)
+                                      ? darkModeGrey
+                                      : Colors.black12,
+                                  width: double.maxFinite,
+                                ),
+                              ),
+                              itemBuilder: (context, index) => Slidable(
+                                endActionPane: ActionPane(
+                                  motion: const DrawerMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        if (Platform.isIOS) {
+                                          HapticFeedback.lightImpact();
+                                        }
+                                        context
+                                            .read<NotesViewModel>()
+                                            .toggleUnmissable(
+                                                notes[index], context);
+                                      },
+                                      backgroundColor: Colors.amber,
+                                      icon: CupertinoIcons.bell_fill,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        if (Platform.isIOS) {
+                                          HapticFeedback.lightImpact();
+                                        }
+                                        context
+                                            .read<NotesViewModel>()
+                                            .togglePin(notes[index], context);
+                                      },
+                                      backgroundColor: Colors.blue,
+                                      icon: FontAwesomeIcons.thumbtack,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        if (Platform.isIOS) {
+                                          HapticFeedback.lightImpact();
+                                        }
+                                        NoteModel note = notes[index];
+                                        context
+                                            .read<NotesViewModel>()
+                                            .deleteNote(note, context);
+                                      },
+                                      backgroundColor: Colors.red,
+                                      icon: FontAwesomeIcons.trash,
+                                    ),
+                                  ],
+                                ),
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => EditScreen(
+                                          note: notes[index],
                                         ),
-                                        const SizedBox(
-                                          width: 5,
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: CupertinoListTile(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 15,
+                                        horizontal: 5,
+                                      ),
+                                      title: Text(
+                                        notes[index].title,
+                                        style: TextStyle(
+                                          color: isDarkMode(context)
+                                              ? Colors.white
+                                              : darkModeBlack,
+                                          fontSize: fontSize,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        FaIcon(
-                                          FontAwesomeIcons.thumbtack,
-                                          color: Colors.blue.shade700,
-                                          size: 15,
-                                        ),
-                                      ],
-                                    )
-                                  : notes[index].isUnmissable
-                                      ? Icon(
-                                          Icons.notifications,
-                                          color: Colors.yellow.shade700,
-                                          size: 19,
-                                        )
-                                      : notes[index].isPinned
-                                          ? FaIcon(
-                                              FontAwesomeIcons.thumbtack,
-                                              color: Colors.blue.shade700,
-                                              size: 15,
+                                      ),
+                                      additionalInfo: notes[index].isPinned &&
+                                              notes[index].isUnmissable
+                                          ? Row(
+                                              children: [
+                                                Icon(
+                                                  Icons.notifications,
+                                                  color: Colors.yellow.shade700,
+                                                  size: 19,
+                                                ),
+                                                const SizedBox(
+                                                  width: 5,
+                                                ),
+                                                FaIcon(
+                                                  FontAwesomeIcons.thumbtack,
+                                                  color: Colors.blue.shade700,
+                                                  size: 15,
+                                                ),
+                                              ],
                                             )
-                                          : null,
-                          subtitle: Text(
-                            notes[index].body.replaceAll('\n', ''),
-                            style: TextStyle(
-                              color: darkModeGrey,
-                              fontSize: fontSize - 3,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                                          : notes[index].isUnmissable
+                                              ? Icon(
+                                                  Icons.notifications,
+                                                  color: Colors.yellow.shade700,
+                                                  size: 19,
+                                                )
+                                              : notes[index].isPinned
+                                                  ? FaIcon(
+                                                      FontAwesomeIcons
+                                                          .thumbtack,
+                                                      color:
+                                                          Colors.blue.shade700,
+                                                      size: 15,
+                                                    )
+                                                  : null,
+                                      subtitle: Text(
+                                        notes[index].body.replaceAll('\n', ''),
+                                        style: TextStyle(
+                                          color: darkModeGrey,
+                                          fontSize: fontSize - 3,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          });
+                    }),
               ),
             ),
           ],

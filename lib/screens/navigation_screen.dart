@@ -33,43 +33,49 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: screens[_index],
-      bottomSheet: Container(
-        color: isDarkMode(context) ? darkModeBlack : Colors.white,
-        height: 75,
-        child: Row(
-          children: [
-            Expanded(
-              child: InkWell(
-                onTap: () => changeScreen(0),
-                child: Center(
-                  child: Opacity(
-                    opacity: _index == 0 ? 1 : 0.4,
-                    child: const FaIcon(
-                      CupertinoIcons.home,
-                      size: 20,
+    return MaterialApp(
+      theme: lightTheme(),
+      darkTheme: darkTheme(),
+      themeMode: ThemeMode.system,
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: screens[_index],
+        bottomSheet: Container(
+          color: isDarkMode(context) ? darkModeBlack : Colors.white,
+          height: 75,
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () => changeScreen(0),
+                  child: Center(
+                    child: Opacity(
+                      opacity: _index == 0 ? 1 : 0.4,
+                      child: const FaIcon(
+                        CupertinoIcons.home,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-            Expanded(
-              child: InkWell(
-                onTap: () => changeScreen(1),
-                child: Center(
-                  child: Opacity(
-                    opacity: _index == 1 ? 1 : 0.4,
-                    child: const FaIcon(
-                      CupertinoIcons.pen,
-                      size: 20,
+              Expanded(
+                child: InkWell(
+                  onTap: () => changeScreen(1),
+                  child: Center(
+                    child: Opacity(
+                      opacity: _index == 1 ? 1 : 0.4,
+                      child: const FaIcon(
+                        CupertinoIcons.pen,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/utils/enums.dart';
 import 'package:unmissable/utils/themes.dart';
@@ -21,6 +24,9 @@ Widget sortNotesListTile(
     ),
     trailing: const CupertinoListTileChevron(),
     onTap: () {
+      if (Platform.isIOS) {
+        HapticFeedback.lightImpact();
+      }
       showCupertinoModalPopup(
         context: context,
         builder: (context) => StatefulBuilder(builder: (context, setState) {

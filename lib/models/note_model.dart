@@ -34,4 +34,28 @@ class NoteModel {
     required this.isPinned,
     required this.isUnmissable,
   });
+
+  NoteModel.fromJson(Map<String, dynamic> json)
+      : uniqueKey = json["uniqueKey"],
+        title = json['title'],
+        body = json['body'],
+        createdDateTime =
+            DateTime.parse(json['createdDateTime'].toDate().toString()),
+        editedDateTime =
+            DateTime.parse(json['editedDateTime'].toDate().toString()),
+        isPinned = json['isPinned'],
+        isUnmissable = json['isUnmissable'];
+
+  Map<String, dynamic> toJson(uid) {
+    return {
+      "uniqueKey": uniqueKey,
+      "title": title,
+      "body": body,
+      "createdDateTime": createdDateTime,
+      "editedDateTime": editedDateTime,
+      "isPinned": isPinned,
+      "isUnmissable": isUnmissable,
+      "uid": uid,
+    };
+  }
 }

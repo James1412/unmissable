@@ -43,8 +43,9 @@ dependencies:
   intl: 0.18.1
   url_launcher: 6.2.4
   flutter_local_notifications: 16.3.2
-  feedback: 3.0.0
-  image_gallery_saver: ^2.0.3
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.4
+  cloud_firestore: ^4.15.5
 
 dev_dependencies:
   hive_generator: 2.0.1

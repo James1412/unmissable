@@ -25,20 +25,29 @@ class NotificationService {
     );
   }
 
-  notificationDetails() {
+  notificationDetails() async {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'channelId',
         'channelName',
-        importance: Importance.max,
+        importance: Importance.min,
+        playSound: false,
+        silent: true,
       ),
       iOS: DarwinNotificationDetails(
         presentSound: false,
         presentBanner: false,
         presentAlert: false,
-        interruptionLevel: InterruptionLevel.timeSensitive,
+        presentList: true,
+        presentBadge: false,
+        interruptionLevel: InterruptionLevel.passive,
       ),
     );
+  }
+
+  Future<int> notificationNum() async {
+    List notifications = await notificationsPlugin.getActiveNotifications();
+    return notifications.length;
   }
 
   Future<void> showNotification(
