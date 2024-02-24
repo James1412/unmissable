@@ -57,6 +57,7 @@ void onSettingsTap(
                             builder: (context) => const Center(
                                 child: CircularProgressIndicator.adaptive()),
                           );
+                          // ignore: deprecated_member_use
                           await Purchases.purchaseProduct(
                             'unmissable_5_lifetime_remove_ads',
                           );
@@ -73,6 +74,23 @@ void onSettingsTap(
                         }
                       },
               ),
+              if (!isSubscribed)
+                CupertinoListTile(
+                  leading: Icon(
+                    Icons.restore,
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                  ),
+                  title: Text(
+                    "Restore purchase",
+                    style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                    ),
+                  ),
+                  trailing: const CupertinoListTileChevron(),
+                  onTap: () async {
+                    await Purchases.restorePurchases();
+                  },
+                ),
             ],
           ),
           if (Platform.isIOS)
