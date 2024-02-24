@@ -127,7 +127,7 @@ class NotesViewModel extends ChangeNotifier {
     RepeatInterval interval =
         Provider.of<NotificationIntervalViewModel>(context, listen: false)
             .interval;
-    sortHelper(context);
+    notes = sortNotes(context, notes);
     for (NoteModel noteModel in notes.reversed) {
       if (noteModel.isUnmissable) {
         await NotificationService().showNotification(

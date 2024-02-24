@@ -45,45 +45,48 @@ void onMoreTap({required BuildContext context}) {
                   ),
                 ),
                 trailing: const CupertinoListTileChevron(),
+                // TODO: Implement remove ads
                 onTap: () {},
               ),
             ],
           ),
-          CupertinoListSection.insetGrouped(
-            header: Text(
-              "WIDGET",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
-              ),
-            ),
-            children: [
-              CupertinoListTile(
-                leading: Icon(
-                  Icons.widgets,
-                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+          if (Platform.isIOS)
+            //TODO: Implement Android widget
+            CupertinoListSection.insetGrouped(
+              header: Text(
+                "WIDGET",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
                 ),
-                title: Text(
-                  "How to use widget?",
-                  style: TextStyle(
+              ),
+              children: [
+                CupertinoListTile(
+                  leading: Icon(
+                    Icons.widgets,
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
+                  title: Text(
+                    "How to use widget?",
+                    style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                    ),
+                  ),
+                  trailing: const CupertinoListTileChevron(),
+                  onTap: () async {
+                    if (Platform.isAndroid) {
+                      await launchUrl(Uri.parse(
+                          "https://guidebooks.google.com/android/customizeyourphone/addwidgets"));
+                    }
+                    if (Platform.isIOS) {
+                      await launchUrl(Uri.parse(
+                          "https://support.apple.com/en-ca/HT207122"));
+                    }
+                  },
                 ),
-                trailing: const CupertinoListTileChevron(),
-                onTap: () async {
-                  if (Platform.isAndroid) {
-                    await launchUrl(Uri.parse(
-                        "https://guidebooks.google.com/android/customizeyourphone/addwidgets"));
-                  }
-                  if (Platform.isIOS) {
-                    await launchUrl(
-                        Uri.parse("https://support.apple.com/en-ca/HT207122"));
-                  }
-                },
-              ),
-            ],
-          ),
+              ],
+            ),
           CupertinoListSection.insetGrouped(
             header: Text(
               "STYLE",

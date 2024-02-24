@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/repos/firebase_auth.dart';
@@ -26,12 +27,14 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
-  List<NoteModel> searchResults = [];
+  String appGroupId = 'group.unmissable_app_group';
+  String iOSWidgetName = 'HomeScreenWidget';
 
   @override
   void initState() {
     super.initState();
     FirebaseAuthentication().initAuth();
+    HomeWidget.setAppGroupId(appGroupId);
   }
 
   @override
@@ -46,8 +49,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
+    if (notes.isNotEmpty) {
+      HomeWidget.saveWidgetData<String>('title', notes.first.title);
+      HomeWidget.saveWidgetData<String>('description', notes.first.body);
+      HomeWidget.updateWidget(iOSName: iOSWidgetName);
+    }
+
     return GestureDetector(
-      onTap: () {
+      onTap: () async {
         if (FocusManager.instance.primaryFocus != null) {
           FocusManager.instance.primaryFocus!.unfocus();
         }

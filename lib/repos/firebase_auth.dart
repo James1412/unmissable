@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -43,7 +43,6 @@ class FirebaseAuthentication {
     try {
       await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
-      // ignore: use_build_context_synchronously
       // Add the notes to firebase when sign up
       for (NoteModel note
           in Provider.of<NotesViewModel>(context, listen: false).notes) {

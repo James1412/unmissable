@@ -164,6 +164,7 @@ class _EditScreenState extends State<EditScreen> {
           }
         },
         child: Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             automaticallyImplyLeading: true,
             actions: [
@@ -266,7 +267,7 @@ class _EditScreenState extends State<EditScreen> {
                     onChanged: (value) => isUpdateNote = true,
                     autofocus: true,
                     maxLines: null,
-                    minLines: 30,
+                    minLines: 20,
                     style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.normal,

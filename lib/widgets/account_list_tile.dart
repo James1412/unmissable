@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -84,7 +86,6 @@ Widget accountListTile(BuildContext context) {
                     child: const Text("Yes"),
                     onPressed: () async {
                       await FirebaseAuthentication().signOut();
-                      // ignore: use_build_context_synchronously
                       Navigator.pop(context);
                       Navigator.pop(context);
                     },
@@ -130,7 +131,6 @@ Widget accountListTile(BuildContext context) {
                       child: const Text("Yes"),
                       onPressed: () async {
                         await FirebaseAuthentication().deleteAccount();
-                        // ignore: use_build_context_synchronously
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
