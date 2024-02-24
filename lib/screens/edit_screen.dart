@@ -14,9 +14,11 @@ import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
 class EditScreen extends StatefulWidget {
   final NoteModel note;
+  final Function isSearchFalse;
   const EditScreen({
     super.key,
     required this.note,
+    required this.isSearchFalse,
   });
 
   @override
@@ -47,6 +49,7 @@ class _EditScreenState extends State<EditScreen> {
             context,
           );
     }
+    widget.isSearchFalse();
   }
 
   void onInfoTap() {

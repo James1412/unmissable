@@ -31,6 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   String appGroupId = 'group.unmissable_app_group';
   String iOSWidgetName = 'HomeScreenWidget';
+  BannerAd? _ad;
 
   @override
   void initState() {
@@ -51,17 +52,18 @@ class _HomeScreenState extends State<HomeScreen> {
         onAdFailedToLoad: (ad, error) {
           // Releases an ad resource when it fails to load
           ad.dispose();
-          print('Ad load failed (code=${error.code} message=${error.message})');
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(
+                  'Ad load failed (code=${error.code} message=${error.message})')));
         },
       ),
     ).load();
   }
 
-  BannerAd? _ad;
-
   @override
   void dispose() {
     _scrollController.dispose();
+    _controller.dispose();
     _ad?.dispose();
     super.dispose();
   }
@@ -70,7 +72,53 @@ class _HomeScreenState extends State<HomeScreen> {
     return MobileAds.instance.initialize();
   }
 
+  Widget? infoWidget(int index, List<NoteModel> infoNotes) {
+    return infoNotes[index].isPinned && infoNotes[index].isUnmissable
+        ? Row(
+            children: [
+              Icon(
+                Icons.notifications,
+                color: Colors.yellow.shade700,
+                size: 19,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              FaIcon(
+                FontAwesomeIcons.thumbtack,
+                color: Colors.blue.shade700,
+                size: 15,
+              ),
+            ],
+          )
+        : infoNotes[index].isUnmissable
+            ? Icon(
+                Icons.notifications,
+                color: Colors.yellow.shade700,
+                size: 19,
+              )
+            : infoNotes[index].isPinned
+                ? FaIcon(
+                    FontAwesomeIcons.thumbtack,
+                    color: Colors.blue.shade700,
+                    size: 15,
+                  )
+                : null;
+  }
+
   FocusNode focusNode = FocusNode();
+  bool isSearch = false;
+  List<NoteModel> searchNotes = [];
+  final TextEditingController _controller = TextEditingController();
+
+  void isSearchFalse() {
+    isSearch = false;
+    _controller.clear();
+    if (FocusManager.instance.primaryFocus != null) {
+      FocusManager.instance.primaryFocus!.unfocus();
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +129,6 @@ class _HomeScreenState extends State<HomeScreen> {
       HomeWidget.saveWidgetData<String>('description', notes.first.body);
       HomeWidget.updateWidget(iOSName: iOSWidgetName);
     }
-
     return GestureDetector(
       onTap: () async {
         if (FocusManager.instance.primaryFocus != null) {
@@ -97,6 +144,27 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             const AppBarWidget(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CupertinoSearchTextField(
+                style: TextStyle(
+                    color: isDarkMode(context) ? Colors.white : darkModeBlack),
+                controller: _controller,
+                onChanged: (value) {
+                  if (value.isNotEmpty) {
+                    isSearch = true;
+                    searchNotes = notes
+                        .where((element) => (element.title + element.body)
+                            .toLowerCase()
+                            .contains(value.toLowerCase()))
+                        .toList();
+                    setState(() {});
+                  } else {
+                    isSearchFalse();
+                  }
+                },
+              ),
+            ),
             // Ad Widget
             if (_ad != null)
               Container(
@@ -146,7 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                             return ListView.separated(
                               controller: _scrollController,
-                              itemCount: notes.length,
+                              itemCount:
+                                  isSearch ? searchNotes.length : notes.length,
                               separatorBuilder: (context, index) => Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
@@ -170,7 +239,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                         context
                                             .read<NotesViewModel>()
                                             .toggleUnmissable(
-                                                notes[index], context);
+                                                isSearch
+                                                    ? searchNotes[index]
+                                                    : notes[index],
+                                                context);
+                                        isSearchFalse();
                                       },
                                       backgroundColor: Colors.amber,
                                       icon: CupertinoIcons.bell_fill,
@@ -183,7 +256,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                         }
                                         context
                                             .read<NotesViewModel>()
-                                            .togglePin(notes[index], context);
+                                            .togglePin(
+                                                isSearch
+                                                    ? searchNotes[index]
+                                                    : notes[index],
+                                                context);
+                                        isSearchFalse();
                                       },
                                       backgroundColor: Colors.blue,
                                       icon: FontAwesomeIcons.thumbtack,
@@ -193,10 +271,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                         if (Platform.isIOS) {
                                           HapticFeedback.lightImpact();
                                         }
-                                        NoteModel note = notes[index];
+                                        NoteModel note = isSearch
+                                            ? searchNotes[index]
+                                            : notes[index];
                                         context
                                             .read<NotesViewModel>()
                                             .deleteNote(note, context);
+                                        isSearchFalse();
                                       },
                                       backgroundColor: Colors.red,
                                       icon: FontAwesomeIcons.trash,
@@ -209,7 +290,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => EditScreen(
-                                          note: notes[index],
+                                          note: isSearch
+                                              ? searchNotes[index]
+                                              : notes[index],
+                                          isSearchFalse: isSearchFalse,
                                         ),
                                       ),
                                     );
@@ -223,7 +307,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                         horizontal: 5,
                                       ),
                                       title: Text(
-                                        notes[index].title,
+                                        isSearch
+                                            ? searchNotes[index].title
+                                            : notes[index].title,
                                         style: TextStyle(
                                           color: isDarkMode(context)
                                               ? Colors.white
@@ -232,42 +318,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      additionalInfo: notes[index].isPinned &&
-                                              notes[index].isUnmissable
-                                          ? Row(
-                                              children: [
-                                                Icon(
-                                                  Icons.notifications,
-                                                  color: Colors.yellow.shade700,
-                                                  size: 19,
-                                                ),
-                                                const SizedBox(
-                                                  width: 5,
-                                                ),
-                                                FaIcon(
-                                                  FontAwesomeIcons.thumbtack,
-                                                  color: Colors.blue.shade700,
-                                                  size: 15,
-                                                ),
-                                              ],
-                                            )
-                                          : notes[index].isUnmissable
-                                              ? Icon(
-                                                  Icons.notifications,
-                                                  color: Colors.yellow.shade700,
-                                                  size: 19,
-                                                )
-                                              : notes[index].isPinned
-                                                  ? FaIcon(
-                                                      FontAwesomeIcons
-                                                          .thumbtack,
-                                                      color:
-                                                          Colors.blue.shade700,
-                                                      size: 15,
-                                                    )
-                                                  : null,
+                                      additionalInfo: isSearch
+                                          ? infoWidget(index, searchNotes)
+                                          : infoWidget(index, notes),
                                       subtitle: Text(
-                                        notes[index].body.replaceAll('\n', ''),
+                                        isSearch
+                                            ? searchNotes[index]
+                                                .body
+                                                .replaceAll('\n', '')
+                                            : notes[index]
+                                                .body
+                                                .replaceAll('\n', ''),
                                         style: TextStyle(
                                           color: darkModeGrey,
                                           fontSize: fontSize - 3,
