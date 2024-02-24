@@ -50,9 +50,15 @@ dependencies:
   google_mobile_ads: 1.2.0
   purchases_flutter: ^6.21.1
 
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/appstore.png"
+
 dev_dependencies:
   hive_generator: 2.0.1
   build_runner: 2.4.8
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
