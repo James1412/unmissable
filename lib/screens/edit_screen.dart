@@ -250,7 +250,7 @@ class _EditScreenState extends State<EditScreen> {
                     FocusScope.of(context).requestFocus(bodyNode);
                   },
                   style: TextStyle(
-                    fontSize: 30,
+                    fontSize: fontSize + 10,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
@@ -267,7 +267,7 @@ class _EditScreenState extends State<EditScreen> {
                     onChanged: (value) => isUpdateNote = true,
                     autofocus: true,
                     maxLines: null,
-                    minLines: 20,
+                    minLines: 10,
                     style: TextStyle(
                       fontSize: fontSize,
                       fontWeight: FontWeight.normal,

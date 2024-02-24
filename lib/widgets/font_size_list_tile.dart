@@ -35,16 +35,19 @@ Widget fontSizeListTile(
               const SizedBox(
                 height: 50,
               ),
-              SizedBox(
-                height: 40,
-                width: double.maxFinite,
-                child: Text(
-                  "A, a",
-                  style: TextStyle(
-                    color: isDarkMode(context) ? Colors.white : darkModeBlack,
-                    fontSize: context.watch<FontSizeViewModel>().fontSize,
+              Material(
+                type: MaterialType.transparency,
+                child: SizedBox(
+                  height: 40,
+                  width: double.maxFinite,
+                  child: Text(
+                    "A, a",
+                    style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                      fontSize: context.watch<FontSizeViewModel>().fontSize,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
               ),
               const SizedBox(

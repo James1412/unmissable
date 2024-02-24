@@ -61,7 +61,7 @@ class _SignupLoginScreenState extends State<SignupLoginScreen> {
                   ),
                 ),
                 const SizedBox(
-                  height: 20,
+                  height: 80,
                 ),
                 authButton(
                   context: context,
@@ -110,15 +110,6 @@ class _SignupLoginScreenState extends State<SignupLoginScreen> {
                 ),
                 const SizedBox(
                   height: 15,
-                ),
-                authButton(
-                  context: context,
-                  containerColor: Colors.red,
-                  border: null,
-                  icon: FontAwesomeIcons.google,
-                  textIconColor: Colors.white,
-                  text: "Continue with google",
-                  onTap: () {},
                 ),
               ],
             ),
