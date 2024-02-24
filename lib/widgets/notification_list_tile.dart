@@ -10,7 +10,7 @@ import 'package:unmissable/view_models/notes_view_model.dart';
 import 'package:unmissable/view_models/notification_interval_vm.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 
-Widget notificationRepeatIntervalListTile(
+Widget notificationListTile(
     {required BuildContext context, required double modalHeight}) {
   return CupertinoListSection.insetGrouped(
     header: Text(
@@ -156,6 +156,134 @@ Widget notificationRepeatIntervalListTile(
           ),
         ),
       ),
+      if (Platform.isIOS)
+        CupertinoListTile(
+          leading: Icon(
+            CupertinoIcons.list_bullet,
+            color: isDarkMode(context) ? Colors.white : darkModeBlack,
+          ),
+          onTap: () {
+            if (Platform.isIOS) {
+              HapticFeedback.lightImpact();
+            }
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const NotificationSettingsPage(),
+                ));
+          },
+          title: Text(
+            "Settings on iPhone",
+            style: TextStyle(
+              color: isDarkMode(context) ? Colors.white : darkModeBlack,
+            ),
+          ),
+          trailing: const CupertinoListTileChevron(),
+        ),
     ],
   );
+}
+
+class NotificationSettingsPage extends StatelessWidget {
+  const NotificationSettingsPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(),
+        body: TabBarView(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Go to Unmissable in settings",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "Go to Notification Grouping at the bottom",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Expanded(
+                      child: Container(
+                        height: 490,
+                        width: 250,
+                        decoration: const BoxDecoration(),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset(
+                          'assets/intro1.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Switch to Off",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text(
+                    "This will show the list of notes without grouping them in one notification",
+                    style: TextStyle(fontSize: 17),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Center(
+                    child: Expanded(
+                      child: Container(
+                        height: 490,
+                        width: 250,
+                        decoration: const BoxDecoration(),
+                        clipBehavior: Clip.hardEdge,
+                        child: Image.asset(
+                          'assets/intro2.png',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          shadowColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              TabPageSelector(
+                color: Colors.red.shade100,
+                selectedColor: Colors.red,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

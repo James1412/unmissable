@@ -9,7 +9,7 @@ import 'package:unmissable/widgets/account_list_tile.dart';
 import 'package:unmissable/widgets/cupertino_modal_sheet.dart';
 import 'package:unmissable/widgets/feedback_list_tile.dart';
 import 'package:unmissable/widgets/font_size_list_tile.dart';
-import 'package:unmissable/widgets/notification_repeat_interval_list_tile.dart';
+import 'package:unmissable/widgets/notification_list_tile.dart';
 import 'package:unmissable/widgets/sort_notes_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -167,8 +167,7 @@ void onSettingsTap(
               ),
             ],
           ),
-          notificationRepeatIntervalListTile(
-              context: context, modalHeight: modalHeight),
+          notificationListTile(context: context, modalHeight: modalHeight),
           accountListTile(context),
           CupertinoListSection.insetGrouped(
             header: Text(

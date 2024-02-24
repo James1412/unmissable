@@ -53,9 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
         onAdFailedToLoad: (ad, error) {
           // Releases an ad resource when it fails to load
           ad.dispose();
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                  'Ad load failed (code=${error.code} message=${error.message})')));
         },
       ),
     ).load();
@@ -212,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             // Ad Widget
-            if (_ad != null && !isSubscribed)
+            if (_ad != null && !isSubscribed && showAds)
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 72,
