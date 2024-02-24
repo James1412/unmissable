@@ -142,6 +142,12 @@ Widget notificationRepeatIntervalListTile(
             HapticFeedback.lightImpact();
           }
           context.read<NotesViewModel>().notificationAllOff();
+          showDialog(
+            context: context,
+            builder: (context) => const AlertDialog.adaptive(
+              content: Text("Cleared"),
+            ),
+          );
         },
         title: Text(
           "Clear all notifications",

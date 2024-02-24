@@ -1,0 +1,5 @@
+Reference Name: ad remover
+Product ID: unmissable_5_lifetime_remove_ads
+Name: Remove ads
+Description: This package will remove the ads
+Default Price: $5

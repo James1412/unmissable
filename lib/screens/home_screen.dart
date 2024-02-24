@@ -9,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/repos/firebase_auth.dart';
 import 'package:unmissable/repos/notes_repository.dart';
@@ -18,7 +19,7 @@ import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
 import 'package:unmissable/view_models/notes_view_model.dart';
-import 'package:unmissable/widgets/app_bar_widget.dart';
+import 'package:unmissable/widgets/settings_popup.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -58,6 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     ).load();
+    Purchases.addCustomerInfoUpdateListener((_) => updateCustomerStatus());
+  }
+
+  bool isSubscribed = false;
+
+  Future updateCustomerStatus() async {
+    if (mounted) {
+      final customerInfo = await Purchases.getCustomerInfo();
+      final entitlement = customerInfo.entitlements.active['no_ad'];
+      setState(() {
+        isSubscribed = entitlement != null;
+      });
+    }
   }
 
   @override
@@ -106,7 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 : null;
   }
 
-  FocusNode focusNode = FocusNode();
   bool isSearch = false;
   List<NoteModel> searchNotes = [];
   final TextEditingController _controller = TextEditingController();
@@ -125,6 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<NoteModel> notes = context.watch<NotesViewModel>().notes;
     double fontSize = context.watch<FontSizeViewModel>().fontSize;
     if (notes.isNotEmpty) {
+      // IOS HomeScreen Widget
       HomeWidget.saveWidgetData<String>('title', notes.first.title);
       HomeWidget.saveWidgetData<String>('description', notes.first.body);
       HomeWidget.updateWidget(iOSName: iOSWidgetName);
@@ -143,30 +157,62 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 20,
             ),
-            const AppBarWidget(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CupertinoSearchTextField(
-                style: TextStyle(
-                    color: isDarkMode(context) ? Colors.white : darkModeBlack),
-                controller: _controller,
-                onChanged: (value) {
-                  if (value.isNotEmpty) {
-                    isSearch = true;
-                    searchNotes = notes
-                        .where((element) => (element.title + element.body)
-                            .toLowerCase()
-                            .contains(value.toLowerCase()))
-                        .toList();
-                    setState(() {});
-                  } else {
-                    isSearchFalse();
-                  }
-                },
+            Container(
+              color: isDarkMode(context) ? darkModeBlack : null,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Notes",
+                          style: TextStyle(
+                              fontSize: 30, fontWeight: FontWeight.bold),
+                        ),
+                        GestureDetector(
+                          onTap: () => onSettingsTap(
+                              context: context, isSubscribed: isSubscribed),
+                          child: const Icon(FontAwesomeIcons.ellipsis),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    CupertinoSearchTextField(
+                      onSubmitted: (_) {
+                        if (Platform.isIOS) {
+                          HapticFeedback.lightImpact();
+                        }
+                      },
+                      style: TextStyle(
+                          color: isDarkMode(context)
+                              ? Colors.white
+                              : darkModeBlack),
+                      controller: _controller,
+                      onChanged: (value) {
+                        if (value.isNotEmpty) {
+                          isSearch = true;
+                          searchNotes = notes
+                              .where((element) => (element.title + element.body)
+                                  .toLowerCase()
+                                  .contains(value.toLowerCase()))
+                              .toList();
+                          setState(() {});
+                        } else {
+                          isSearch = false;
+                          setState(() {});
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
             ),
             // Ad Widget
-            if (_ad != null)
+            if (_ad != null && !isSubscribed)
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: 72,

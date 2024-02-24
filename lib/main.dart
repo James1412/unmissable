@@ -2,6 +2,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/object_wrappers.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:unmissable/firebase_options.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/navigation_screen.dart';
@@ -28,7 +30,11 @@ Future<void> initApp() async {
   await Hive.openBox(notificationIntervalBoxName);
   await Hive.openBox(firstTimeBoxName);
   await NotificationService().initNotification();
+  await Purchases.configure(_configuration);
 }
+
+final _configuration =
+    PurchasesConfiguration('appl_jTcHeUOlRTKwrlMMDSOFYVTajaU');
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

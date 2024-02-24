@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:unmissable/screens/deleted_notes_screen.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/widgets/account_list_tile.dart';
@@ -12,7 +13,8 @@ import 'package:unmissable/widgets/notification_repeat_interval_list_tile.dart';
 import 'package:unmissable/widgets/sort_notes_list_tile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-void onMoreTap({required BuildContext context}) {
+void onSettingsTap(
+    {required BuildContext context, required bool isSubscribed}) {
   final double modalHeight = MediaQuery.of(context).size.height * 0.85;
   if (Platform.isIOS) {
     HapticFeedback.lightImpact();
@@ -39,14 +41,37 @@ void onMoreTap({required BuildContext context}) {
                   color: isDarkMode(context) ? Colors.white : darkModeBlack,
                 ),
                 title: Text(
-                  "Remove ads",
+                  isSubscribed ? "Ads removed!" : "Remove ads",
                   style: TextStyle(
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
                 ),
-                trailing: const CupertinoListTileChevron(),
-                // TODO: Implement remove ads
-                onTap: () {},
+                trailing:
+                    isSubscribed ? null : const CupertinoListTileChevron(),
+                onTap: isSubscribed
+                    ? () {}
+                    : () async {
+                        try {
+                          showDialog(
+                            context: context,
+                            builder: (context) => const Center(
+                                child: CircularProgressIndicator.adaptive()),
+                          );
+                          await Purchases.purchaseProduct(
+                            'unmissable_5_lifetime_remove_ads',
+                          );
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
+                        } catch (e) {
+                          // ignore: use_build_context_synchronously
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog.adaptive(
+                              content: Text(e.toString()),
+                            ),
+                          );
+                        }
+                      },
               ),
             ],
           ),

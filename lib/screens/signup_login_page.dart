@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:unmissable/repos/firebase_auth.dart';
@@ -44,7 +45,8 @@ class _SignUpPageState extends State<SignUpPage> {
     if (widget.type == SignUpLogin.signUp) {
       showDialog(
         context: context,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+        builder: (context) =>
+            const Center(child: CircularProgressIndicator.adaptive()),
       );
       final auth = await FirebaseAuthentication().signUpWithEmail(
         email: _emailController.text,
@@ -56,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
         if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (context) => AlertDialog.adaptive(
             title: const Text("Error"),
             content: Text(auth.message!),
           ),
@@ -73,7 +75,8 @@ class _SignUpPageState extends State<SignUpPage> {
     } else if (widget.type == SignUpLogin.logIn) {
       showDialog(
         context: context,
-        builder: (context) => const Center(child: CircularProgressIndicator()),
+        builder: (context) =>
+            const Center(child: CircularProgressIndicator.adaptive()),
       );
       final auth = await FirebaseAuthentication().signInWithEmail(
         email: _emailController.text,
@@ -84,7 +87,7 @@ class _SignUpPageState extends State<SignUpPage> {
         if (!mounted) return;
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
+          builder: (context) => AlertDialog.adaptive(
             title: const Text("Error"),
             content: Text(auth.message!),
           ),
@@ -101,6 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
+  bool showPassword = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -150,10 +154,23 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 TextField(
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    label: Text("Password"),
+                  obscureText: showPassword ? false : true,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    label: const Text("Password"),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        if (Platform.isIOS) {
+                          HapticFeedback.lightImpact();
+                        }
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      child: Icon(showPassword
+                          ? CupertinoIcons.eye
+                          : CupertinoIcons.eye_slash),
+                    ),
                   ),
                   keyboardType: TextInputType.visiblePassword,
                 ),

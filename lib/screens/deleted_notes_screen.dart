@@ -9,6 +9,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/view_screen.dart';
 import 'package:unmissable/utils/ad_helper.dart';
@@ -49,6 +50,17 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
         },
       ),
     ).load();
+    Purchases.addCustomerInfoUpdateListener((_) => updateCustomerStatus());
+  }
+
+  bool isSubscribed = false;
+
+  Future updateCustomerStatus() async {
+    final customerInfo = await Purchases.getCustomerInfo();
+    final entitlement = customerInfo.entitlements.active['no_ad'];
+    setState(() {
+      isSubscribed = entitlement != null;
+    });
   }
 
   @override
@@ -138,22 +150,22 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
           ),
         ],
       ),
-      body: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              notes = context.watch<DeletedNotesViewModel>().deletedNotes;
-            }
-            return ListView(
-              children: [
-                if (_ad != null)
-                  Container(
-                    width: MediaQuery.of(context).size.width,
-                    height: 72,
-                    alignment: Alignment.center,
-                    child: AdWidget(ad: _ad!),
-                  ),
-                StreamBuilder(
+      body: ListView(
+        children: [
+          if (_ad != null && !isSubscribed)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 72,
+              alignment: Alignment.center,
+              child: AdWidget(ad: _ad!),
+            ),
+          StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  notes = context.watch<DeletedNotesViewModel>().deletedNotes;
+                }
+                return StreamBuilder(
                     stream: FirebaseFirestore.instance
                         .collection(deletedNotesBoxName)
                         .snapshots(),
@@ -258,10 +270,10 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                           ),
                         ),
                       );
-                    }),
-              ],
-            );
-          }),
+                    });
+              }),
+        ],
+      ),
     );
   }
 }
