@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "369464772062",
+    "project_id": "unmissable-73087",
+    "storage_bucket": "unmissable-73087.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369464772062:android:b93bd33b42e6277acac94f",
+        "android_client_info": {
+          "package_name": "com.example.unmissable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVKrxn3aPwGUssYnKMO-yvaMXaicHzK7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369464772062:android:d050f751b2dfd838cac94f",
+        "android_client_info": {
+          "package_name": "com.tistory.flutterdevjames.unmissable"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVKrxn3aPwGUssYnKMO-yvaMXaicHzK7M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

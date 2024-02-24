@@ -55,7 +55,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBVKrxn3aPwGUssYnKMO-yvaMXaicHzK7M',
-    appId: '1:369464772062:android:b93bd33b42e6277acac94f',
+    appId: '1:369464772062:android:d050f751b2dfd838cac94f',
     messagingSenderId: '369464772062',
     projectId: 'unmissable-73087',
     storageBucket: 'unmissable-73087.appspot.com',
@@ -63,11 +63,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyCZwHGgIAoNexQQRaoHU7o9HyqM8IK5l2g',
-    appId: '1:369464772062:ios:d527d6a6a1c15855cac94f',
+    appId: '1:369464772062:ios:47a650379651ea0dcac94f',
     messagingSenderId: '369464772062',
     projectId: 'unmissable-73087',
     storageBucket: 'unmissable-73087.appspot.com',
-    iosBundleId: 'com.example.unmissable',
+    iosBundleId: 'com.tistory.flutterdevjames.unmissable',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
