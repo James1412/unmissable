@@ -40,6 +40,10 @@ This app is featured in both IOS app store and Android playstore
 | intl                        | 0.19.0  |
 | url_launcher                | 6.2.4   |
 | flutter_local_notifications | 16.3.2  |
+| home_widget                 | 0.3.0   |
+| firebase_core               | ^2.25.4 |
+| firebase_auth               | ^4.17.4 |
+| cloud_firestore             | ^4.15.5 |
 
 ### State Management
 

@@ -12,6 +12,6 @@ class NotificationIntervalRepository {
 
   String getNotiInterval() {
     return notificationIntervalBox.get(notificationIntervalBoxName) ??
-        RepeatInterval.hourly.toString();
+        RepeatInterval.everyMinute.toString();
   }
 }
