@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:home_widget/home_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/repos/firebase_auth.dart';
 import 'package:unmissable/repos/notes_repository.dart';
 import 'package:unmissable/screens/edit_screen.dart';
+import 'package:unmissable/utils/ad_helper.dart';
 import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/font_size_view_model.dart';
@@ -35,12 +37,37 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     FirebaseAuthentication().initAuth();
     HomeWidget.setAppGroupId(appGroupId);
+    _initGoogleMobileAds();
+    BannerAd(
+      adUnitId: AdHelper.banner1AdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
   }
+
+  BannerAd? _ad;
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _ad?.dispose();
     super.dispose();
+  }
+
+  Future<InitializationStatus> _initGoogleMobileAds() {
+    return MobileAds.instance.initialize();
   }
 
   FocusNode focusNode = FocusNode();
@@ -70,6 +97,14 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 20,
             ),
             const AppBarWidget(),
+            // Ad Widget
+            if (_ad != null)
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 72,
+                alignment: Alignment.center,
+                child: AdWidget(ad: _ad!),
+              ),
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.75,
               child: Scrollbar(

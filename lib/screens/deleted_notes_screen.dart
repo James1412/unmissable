@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:provider/provider.dart';
 import 'package:unmissable/models/note_model.dart';
 import 'package:unmissable/screens/view_screen.dart';
+import 'package:unmissable/utils/ad_helper.dart';
 import 'package:unmissable/utils/hive_box_names.dart';
 import 'package:unmissable/utils/themes.dart';
 import 'package:unmissable/view_models/deleted_notes_vm.dart';
@@ -26,10 +28,33 @@ class DeletedNotesScreen extends StatefulWidget {
 class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
   final ScrollController _scrollController = ScrollController();
   List<NoteModel> notes = [];
+  BannerAd? _ad;
+  @override
+  void initState() {
+    super.initState();
+    BannerAd(
+      adUnitId: AdHelper.banner2AdUnitId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _ad = ad as BannerAd;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          // Releases an ad resource when it fails to load
+          ad.dispose();
+          print('Ad load failed (code=${error.code} message=${error.message})');
+        },
+      ),
+    ).load();
+  }
 
   @override
   void dispose() {
     _scrollController.dispose();
+    _ad?.dispose();
     super.dispose();
   }
 
@@ -119,106 +144,123 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
             if (!snapshot.hasData) {
               notes = context.watch<DeletedNotesViewModel>().deletedNotes;
             }
-            return StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection(deletedNotesBoxName)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData &&
-                      FirebaseAuth.instance.currentUser != null) {
-                    List<NoteModel> streamNotes = [];
-                    snapshot.data!.docs
-                        .where((element) =>
-                            element['uid'] ==
-                            FirebaseAuth.instance.currentUser!.uid)
-                        .forEach((element) {
-                      NoteModel note = NoteModel.fromJson(element.data());
-                      streamNotes.add(note);
-                    });
-                    notes = sortNotes(context, streamNotes);
-                  } else {
-                    notes = context.watch<DeletedNotesViewModel>().deletedNotes;
-                  }
-                  return ListView.separated(
-                    controller: _scrollController,
-                    itemCount: notes.length,
-                    separatorBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Container(
-                        height: 1,
-                        color:
-                            isDarkMode(context) ? darkModeGrey : Colors.black12,
-                        width: double.maxFinite,
-                      ),
-                    ),
-                    itemBuilder: (context, index) => Slidable(
-                      endActionPane: ActionPane(
-                        motion: const DrawerMotion(),
-                        children: [
-                          SlidableAction(
-                            onPressed: (context) {
+            return ListView(
+              children: [
+                if (_ad != null)
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 72,
+                    alignment: Alignment.center,
+                    child: AdWidget(ad: _ad!),
+                  ),
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection(deletedNotesBoxName)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData &&
+                          FirebaseAuth.instance.currentUser != null) {
+                        List<NoteModel> streamNotes = [];
+                        snapshot.data!.docs
+                            .where((element) =>
+                                element['uid'] ==
+                                FirebaseAuth.instance.currentUser!.uid)
+                            .forEach((element) {
+                          NoteModel note = NoteModel.fromJson(element.data());
+                          streamNotes.add(note);
+                        });
+                        notes = sortNotes(context, streamNotes);
+                      } else {
+                        notes =
+                            context.watch<DeletedNotesViewModel>().deletedNotes;
+                      }
+                      return ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: _scrollController,
+                        itemCount: notes.length,
+                        separatorBuilder: (context, index) => Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            height: 1,
+                            color: isDarkMode(context)
+                                ? darkModeGrey
+                                : Colors.black12,
+                            width: double.maxFinite,
+                          ),
+                        ),
+                        itemBuilder: (context, index) => Slidable(
+                          endActionPane: ActionPane(
+                            motion: const DrawerMotion(),
+                            children: [
+                              SlidableAction(
+                                onPressed: (context) {
+                                  if (Platform.isIOS) {
+                                    HapticFeedback.lightImpact();
+                                  }
+                                  context
+                                      .read<DeletedNotesViewModel>()
+                                      .recoverNote(notes[index], context);
+                                },
+                                backgroundColor: Colors.greenAccent,
+                                icon: Icons.restore,
+                              ),
+                              SlidableAction(
+                                onPressed: (context) =>
+                                    onDeleteNote(notes[index]),
+                                backgroundColor: Colors.red,
+                                icon: FontAwesomeIcons.trash,
+                              ),
+                            ],
+                          ),
+                          child: InkWell(
+                            onTap: () {
                               if (Platform.isIOS) {
                                 HapticFeedback.lightImpact();
                               }
-                              context
-                                  .read<DeletedNotesViewModel>()
-                                  .recoverNote(notes[index], context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ViewScreen(
+                                    note: notes[index],
+                                    onDeleteNote: onDeleteNote,
+                                  ),
+                                ),
+                              );
                             },
-                            backgroundColor: Colors.greenAccent,
-                            icon: Icons.restore,
-                          ),
-                          SlidableAction(
-                            onPressed: (context) => onDeleteNote(notes[index]),
-                            backgroundColor: Colors.red,
-                            icon: FontAwesomeIcons.trash,
-                          ),
-                        ],
-                      ),
-                      child: InkWell(
-                        onTap: () {
-                          if (Platform.isIOS) {
-                            HapticFeedback.lightImpact();
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ViewScreen(
-                                note: notes[index],
-                                onDeleteNote: onDeleteNote,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: CupertinoListTile(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 15,
-                              horizontal: 5,
-                            ),
-                            title: Text(
-                              notes[index].title,
-                              style: TextStyle(
-                                color: isDarkMode(context)
-                                    ? Colors.white
-                                    : darkModeBlack,
-                                fontSize: fontSize,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            subtitle: Text(
-                              notes[index].body.replaceAll('\n', ''),
-                              style: TextStyle(
-                                color: darkModeGrey,
-                                fontSize: fontSize - 3,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: CupertinoListTile(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 15,
+                                  horizontal: 5,
+                                ),
+                                title: Text(
+                                  notes[index].title,
+                                  style: TextStyle(
+                                    color: isDarkMode(context)
+                                        ? Colors.white
+                                        : darkModeBlack,
+                                    fontSize: fontSize,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  notes[index].body.replaceAll('\n', ''),
+                                  style: TextStyle(
+                                    color: darkModeGrey,
+                                    fontSize: fontSize - 3,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  );
-                });
+                      );
+                    }),
+              ],
+            );
           }),
     );
   }

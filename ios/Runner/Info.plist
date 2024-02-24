@@ -55,6 +55,7 @@
 		<string>https</string>
 		<string>mailto</string>
 	</array>
-	
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-3496653110999581~9761795556</string>
 </dict>
 </plist>
