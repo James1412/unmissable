@@ -63,12 +63,12 @@ void onSettingsTap(
                           );
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context);
-                        } catch (e) {
+                        } on PlatformException catch (e) {
                           // ignore: use_build_context_synchronously
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog.adaptive(
-                              content: Text(e.toString()),
+                              content: Text(e.message.toString()),
                             ),
                           );
                         }
@@ -88,7 +88,16 @@ void onSettingsTap(
                   ),
                   trailing: const CupertinoListTileChevron(),
                   onTap: () async {
-                    await Purchases.restorePurchases();
+                    try {
+                      await Purchases.restorePurchases();
+                    } on PlatformException catch (e) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog.adaptive(
+                                content: Text(e.message as String),
+                              ));
+                      //This is awesome
+                    }
                   },
                 ),
             ],
