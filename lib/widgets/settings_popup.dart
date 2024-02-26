@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:unmissable/screens/deleted_notes_screen.dart';
 import 'package:unmissable/utils/themes.dart';
@@ -49,10 +50,27 @@ void onSettingsTap(
                 trailing:
                     isSubscribed ? null : const CupertinoListTileChevron(),
                 onTap: isSubscribed
-                    ? () {}
+                    ? () {
+                        Purchases.logOut();
+                      }
                     : () async {
+                        bool result =
+                            await InternetConnection().hasInternetAccess;
+                        if (!result) {
+                          await showDialog(
+                            // ignore: use_build_context_synchronously
+                            context: context,
+                            builder: (context) => const AlertDialog.adaptive(
+                              title: Text("Internect Connection Issue"),
+                              content:
+                                  Text("Please connect to internet to proceed"),
+                            ),
+                          );
+                          return;
+                        }
                         try {
                           showDialog(
+                            // ignore: use_build_context_synchronously
                             context: context,
                             builder: (context) => const Center(
                                 child: CircularProgressIndicator.adaptive()),
@@ -66,6 +84,7 @@ void onSettingsTap(
                         } on PlatformException catch (e) {
                           // ignore: use_build_context_synchronously
                           showDialog(
+                            // ignore: use_build_context_synchronously
                             context: context,
                             builder: (context) => AlertDialog.adaptive(
                               content: Text(e.message.toString()),
@@ -92,11 +111,12 @@ void onSettingsTap(
                       await Purchases.restorePurchases();
                     } on PlatformException catch (e) {
                       showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog.adaptive(
-                                content: Text(e.message as String),
-                              ));
-                      //This is awesome
+                        // ignore: use_build_context_synchronously
+                        context: context,
+                        builder: (context) => AlertDialog.adaptive(
+                          content: Text(e.message as String),
+                        ),
+                      );
                     }
                   },
                 ),
