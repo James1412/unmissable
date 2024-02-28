@@ -201,7 +201,7 @@ class NotificationSettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Go to Unmissable in settings",
+                    "Go to Unmissable notification in settings",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
@@ -217,7 +217,7 @@ class NotificationSettingsPage extends StatelessWidget {
                   Center(
                     child: Expanded(
                       child: Container(
-                        height: 490,
+                        height: 510,
                         width: 250,
                         decoration: const BoxDecoration(),
                         clipBehavior: Clip.hardEdge,
@@ -237,14 +237,14 @@ class NotificationSettingsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "Switch to Off",
+                    "Switch to off",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   const Text(
-                    "This will show the list of notes without grouping them in one notification",
+                    "This will show the full list of notes without grouping them in one notification",
                     style: TextStyle(fontSize: 17),
                   ),
                   const SizedBox(
@@ -269,10 +269,8 @@ class NotificationSettingsPage extends StatelessWidget {
             ),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.transparent,
-          shadowColor: Colors.transparent,
-          surfaceTintColor: Colors.transparent,
+        bottomNavigationBar: SizedBox(
+          height: 80,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

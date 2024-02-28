@@ -23,4 +23,4 @@ class AdHelper {
 }
 
 //TODO: Change on deployment
-bool showAds = false;
+bool showAds = true;

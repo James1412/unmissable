@@ -82,7 +82,10 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
         actions: [
           CupertinoDialogAction(
             isDefaultAction: true,
-            child: const Text("No"),
+            child: const Text(
+              "No",
+              style: TextStyle(color: Colors.grey),
+            ),
             onPressed: () {
               Navigator.pop(context);
             },
@@ -123,7 +126,10 @@ class _DeletedNotesScreenState extends State<DeletedNotesScreen> {
                   actions: [
                     CupertinoDialogAction(
                       isDefaultAction: true,
-                      child: const Text("No"),
+                      child: const Text(
+                        "No",
+                        style: TextStyle(color: Colors.grey),
+                      ),
                       onPressed: () {
                         Navigator.pop(context);
                       },
