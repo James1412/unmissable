@@ -159,43 +159,44 @@ void onSettingsTap(
                 ),
               ],
             ),
-          CupertinoListSection.insetGrouped(
-            header: Text(
-              "STYLE",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
-              ),
-            ),
-            children: [
-              fontSizeListTile(context: context, modalHeight: modalHeight),
-              sortNotesListTile(context: context, modalHeight: modalHeight),
-              CupertinoListTile(
-                leading: Icon(
-                  Icons.dark_mode,
-                  color: isDarkMode(context) ? Colors.white : darkModeBlack,
+          if (Platform.isIOS)
+            CupertinoListSection.insetGrouped(
+              header: Text(
+                "STYLE",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: isDarkMode(context) ? darkModeGrey : headerGreyColor,
                 ),
-                title: Text(
-                  "How to use dark mode?",
-                  style: TextStyle(
+              ),
+              children: [
+                fontSizeListTile(context: context, modalHeight: modalHeight),
+                sortNotesListTile(context: context, modalHeight: modalHeight),
+                CupertinoListTile(
+                  leading: Icon(
+                    Icons.dark_mode,
                     color: isDarkMode(context) ? Colors.white : darkModeBlack,
                   ),
+                  title: Text(
+                    "How to use dark mode?",
+                    style: TextStyle(
+                      color: isDarkMode(context) ? Colors.white : darkModeBlack,
+                    ),
+                  ),
+                  trailing: const CupertinoListTileChevron(),
+                  onTap: () async {
+                    if (Platform.isAndroid) {
+                      await launchUrl(Uri.parse(
+                          "https://support.google.com/android/answer/9730472?hl=en"));
+                    }
+                    if (Platform.isIOS) {
+                      await launchUrl(
+                          Uri.parse("https://support.apple.com/en-ca/108350"));
+                    }
+                  },
                 ),
-                trailing: const CupertinoListTileChevron(),
-                onTap: () async {
-                  if (Platform.isAndroid) {
-                    await launchUrl(Uri.parse(
-                        "https://support.google.com/android/answer/9730472?hl=en"));
-                  }
-                  if (Platform.isIOS) {
-                    await launchUrl(
-                        Uri.parse("https://support.apple.com/en-ca/108350"));
-                  }
-                },
-              ),
-            ],
-          ),
+              ],
+            ),
           notificationListTile(context: context, modalHeight: modalHeight),
           accountListTile(context),
           CupertinoListSection.insetGrouped(
