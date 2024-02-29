@@ -208,6 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
             // Ad Widget
             if (_ad != null && !isSubscribed && showAds)
               Container(

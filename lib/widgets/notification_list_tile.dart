@@ -184,9 +184,15 @@ Widget notificationListTile(
   );
 }
 
-class NotificationSettingsPage extends StatelessWidget {
+class NotificationSettingsPage extends StatefulWidget {
   const NotificationSettingsPage({super.key});
 
+  @override
+  State<NotificationSettingsPage> createState() =>
+      _NotificationSettingsPageState();
+}
+
+class _NotificationSettingsPageState extends State<NotificationSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -215,16 +221,14 @@ class NotificationSettingsPage extends StatelessWidget {
                     height: 20,
                   ),
                   Center(
-                    child: Expanded(
-                      child: Container(
-                        height: 510,
-                        width: 250,
-                        decoration: const BoxDecoration(),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset(
-                          'assets/intro1.png',
-                          fit: BoxFit.cover,
-                        ),
+                    child: Container(
+                      height: 510,
+                      width: 250,
+                      decoration: const BoxDecoration(),
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.asset(
+                        'assets/intro1.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -251,16 +255,14 @@ class NotificationSettingsPage extends StatelessWidget {
                     height: 20,
                   ),
                   Center(
-                    child: Expanded(
-                      child: Container(
-                        height: 490,
-                        width: 250,
-                        decoration: const BoxDecoration(),
-                        clipBehavior: Clip.hardEdge,
-                        child: Image.asset(
-                          'assets/intro2.png',
-                          fit: BoxFit.cover,
-                        ),
+                    child: Container(
+                      height: 490,
+                      width: 250,
+                      decoration: const BoxDecoration(),
+                      clipBehavior: Clip.hardEdge,
+                      child: Image.asset(
+                        'assets/intro2.png',
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
