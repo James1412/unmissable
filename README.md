@@ -25,12 +25,12 @@ This app is featured in both IOS app store and Android playstore
 - **Android PlayStore** :
 
 ## Screenshots
+![IMG_1761](https://github.com/James1412/unmissable/assets/73318218/27c62d31-e874-49fe-8ce4-b59d6c9b2842)
+![IMG_1762](https://github.com/James1412/unmissable/assets/73318218/18c09322-be06-4836-b988-fa68861b0121)
+![IMG_1763](https://github.com/James1412/unmissable/assets/73318218/401cfa62-f2d2-4390-8a76-5dd764edd257)
+![IMG_1764](https://github.com/James1412/unmissable/assets/73318218/44e6d6dd-5818-4dcb-b31c-8593af55246f)
+![IMG_1765](https://github.com/James1412/unmissable/assets/73318218/0b780684-e4ae-4d04-99f3-e600ac51e4d8)
 
-/Users/ijigang/Downloads/IMG_1765.PNG
-/Users/ijigang/Downloads/IMG_1764.PNG
-/Users/ijigang/Downloads/IMG_1763.PNG
-/Users/ijigang/Downloads/IMG_1762.PNG
-/Users/ijigang/Downloads/IMG_1761.PNG
 
 ## Skills
 
