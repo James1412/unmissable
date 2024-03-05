@@ -21,10 +21,16 @@ flutter run
 
 This app is featured in both IOS app store and Android playstore
 
-- **iOS AppStore** :
+- **iOS AppStore** : https://apps.apple.com/ca/app/unmissable/id6478439264
 - **Android PlayStore** :
 
 ## Screenshots
+
+/Users/ijigang/Downloads/IMG_1765.PNG
+/Users/ijigang/Downloads/IMG_1764.PNG
+/Users/ijigang/Downloads/IMG_1763.PNG
+/Users/ijigang/Downloads/IMG_1762.PNG
+/Users/ijigang/Downloads/IMG_1761.PNG
 
 ## Skills
 
